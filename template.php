@@ -1,4 +1,6 @@
 <!--this is a template for making pages on the website-->
+<!--include redirect-->
+<?php include 'redirect.php';?>
 <!DOCTYPE html>
 <!--connect to the database and start the session-->
 <?php include 'connect.php';?>

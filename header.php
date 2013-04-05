@@ -1,14 +1,8 @@
 <!-- 	
 This is the header that will be displayed on top of all the pages in our website
-It checks to see if a user is logged in, and then it dynamically generates which links to display in the header
+It dynamically generates which links to display in the header
  -->
 <?php
-
-//check if a user is already logged in
-if(isset($_SESSION['username'])){
-	//if no user is logged on, redirect to the login page
-	header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/login.php");
-}
 
 //get user name
 $user = $_SESSION['username'];
