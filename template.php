@@ -1,5 +1,7 @@
 <!--this is a template for making pages on the website-->
 <!DOCTYPE html>
+<!--connect to the database and start the session-->
+<?php include 'connect.php';?>
 <head>
 <title>Title goes here...</title>
 <!--include the style sheet for the website-->
