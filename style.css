@@ -28,3 +28,49 @@ height:70px;
 font-size:small;
 font-style:italic;
 }
+
+
+
+
+
+body 
+{
+	margin: 0;
+	padding: 0;
+
+	color: #061C37;
+	background: #FFF;
+	background-image:url(images/background.png);
+	background-repeat:repeat-x;
+}
+*
+{
+ margin: 0 auto 0 auto;
+ text-align:left;
+}
+
+#container
+{
+  display: block; 
+  height:auto;
+  position: relative; 
+  width: 940px;
+}
+
+#mainpic
+{
+background-image:url(images/main.jpg);
+background-repeat:no-repeat;
+width:900px;
+height:354px;	
+}
+
+#content
+{
+width:700px;
+height:auto;
+background-color:#EEEFE4;
+padding-left:10px;
+padding-right:10px;
+padding-bottom:5px;
+}
