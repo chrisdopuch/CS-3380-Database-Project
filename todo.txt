@@ -1,0 +1,36 @@
+TO DO:
+
+experimenters:	
+	experiments.php - Adam / Chris
+		if experimenter, shows experiments for which they are asscoiated
+			add experiments
+				requirements to be implemented with a JSON associative array
+					
+			expand an experiment to look at sessions
+			approve or reject participants
+			remove sessions
+			button to add sessions
+	session.php Adam
+		used for adding sessions
+	locations.php - Ben
+		view a list of locations
+		add or remove locations
+		edit locations
+	reports.php - Chris
+		able to search through experiments, sessions, participants, etc
+		contact participants for experiments
+		basic calendar functionality, view sessions by date/time and experiment
+	userInfo.php - Breona
+		change passwords, informations, etc
+	
+
+participants:
+	myExperiments.php - Corey
+		if participant, shows sessions for which they are signed up
+		disenroll from a session
+	enroll.php
+		filter by date, time, experiment
+		button to sign up for experiments
+			be sure to verify that they aren't scheduled for another session at the same time
+	userInfo.php
+		change passwords, informations, etc
