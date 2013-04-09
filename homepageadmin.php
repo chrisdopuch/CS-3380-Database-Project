@@ -1,8 +1,10 @@
+<!--include redirect-->
+<?php include 'redirect.php';?>
+<!DOCTYPE html>
 <html>
 <head>
 <title> Home </title>
 <style type = "text/css">
-
 #top
 {
 		text-align: center;
@@ -11,16 +13,12 @@
 		background-color: #FFD651;
 		text-color: black;
 }
-
 #Options
 {
 	text-align: left;
 	padding-right: 30px;
 	background-color: white;
 {
-
-<img src = "banner.jpg "/>
-
 </style>
 </head>
 <body>
@@ -39,7 +37,7 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<a href = " ">My Profile</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;
-		<a href = " ">Logout</a>
+		<a href = "logout.php">Logout</a>
 		
 	<div id = "Options">
 	

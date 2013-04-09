@@ -37,7 +37,7 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<a href = " ">My Profile</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;
-		<a href = " ">Logout</a>
+		<a href = "logout.php">Logout</a>
 		
 	<div id = "Options">
 	
