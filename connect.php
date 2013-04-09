@@ -9,6 +9,4 @@ $name = "cs3380sp13grp11";
 //Connect
 $conn = pg_connect("host=".$host." user =".$user." password=".$pass." dbname=".$name) or die("Could not connect to ".$host.".");
 
-session_start();
-
 ?>

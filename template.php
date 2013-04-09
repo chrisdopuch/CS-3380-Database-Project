@@ -3,7 +3,8 @@
 <?php include 'redirect.php';?>
 <!DOCTYPE html>
 <!--connect to the database and start the session-->
-<?php include 'connect.php';?>
+<?php include 'connect.php';
+session_start();?>
 <head>
 <title>Title goes here...</title>
 <!--include the style sheet for the website-->
