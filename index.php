@@ -10,8 +10,16 @@
 ERROR_REPORTING(E_ALL);
 ini_set("display_errors", 1);
 
+session_start();
+
 //check if already logged in, and redirect
-if(isset($_SESSION['username'])){ header("Location:  https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepageadmin.php"); }
+if(isset($_SESSION['username'])){ 
+	if($user_type == "experimenter"){
+		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepageadmin.php");
+	} else {
+		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepagepart.php");
+	}
+}
 
 if (isset($_POST['submit'])){
 	//connect to the DB
@@ -43,19 +51,21 @@ if (isset($_POST['submit'])){
 	$result = pg_execute($conn, "authenticate", array($user));
 	$row = pg_fetch_assoc($result);
 	$salt = $row['salt'];
-	$pwhash = $row['password_hash'];
+	$pwhash = $row['pwhash'];
 	$user_type = $row['user_type'];
 	//convert the password entered to a salted hash
 	$local_hash = sha1($salt . $password);
 	//check the local hash against the hashed password in the DB
 	if($local_hash != $pwhash){
 		echo "Error: Invalid password/username combination\n<br>\n";
-		echo "Click <a href='lab8.php'>here</a> to go back to login.\n";
+		echo "Click <a href='index.php'>here</a> to go back to login.\n";
 		return;
 	}	
 	//store username in session variable
 	$_SESSION['username'] = $user;
 	$_SESSION['user_type'] = $user_type;
+	
+	session_write_close();
 	
 	//redirect to home page
 	if($user_type == "experimenter"){
@@ -103,6 +113,7 @@ if (isset($_POST['submit'])){
     	    <h3>&nbsp;</h3>
 		</div>
 </div>
+<?php include 'footer.php';?>
 
 </body>
 </html>
