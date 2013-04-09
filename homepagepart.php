@@ -1,3 +1,6 @@
+<!--include redirect-->
+<?php include 'redirect.php';?>
+<!DOCTYPE html>
 <html>
 <head>
 <title> Home </title>
@@ -24,7 +27,6 @@
 </style>
 </head>
 <body>
-
 	<div id = "banner">
 	
 		<img src = "banner.jpg " alt "Mizzou Physcology"/>

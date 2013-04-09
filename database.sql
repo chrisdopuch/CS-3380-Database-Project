@@ -13,7 +13,7 @@ CREATE TABLE users (
 username		VARCHAR(50) NOT NULL PRIMARY KEY,
 pwhash			CHAR(40) NOT NULL,
 salt			CHAR(40) NOT NULL,
-user_type		CHAR(20) NOT NULL,
+user_type		CHAR(12) NOT NULL,
 email			VARCHAR(50)
 );
 
