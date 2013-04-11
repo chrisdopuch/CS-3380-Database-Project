@@ -19,10 +19,10 @@ email			VARCHAR(50)
 
 CREATE TABLE participants (
 pid 			SERIAL PRIMARY KEY,
-address 		VARCHAR,
+address 		VARCHAR(100),
 phone_number 	NUMERIC,
-ethnicity		CHAR,
-gender			CHAR,
+ethnicity		CHAR(20),
+gender			CHAR(6),
 age				NUMERIC,
 education 		NUMERIC,
 username		VARCHAR REFERENCES database.users(username) ON DELETE CASCADE
