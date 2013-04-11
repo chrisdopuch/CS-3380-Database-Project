@@ -22,7 +22,7 @@
 	background-color: white;
 {
 
-<img src = "banner.jpg "/>
+<img src = "images/banner.jpg "/>
 
 </style>
 </head>

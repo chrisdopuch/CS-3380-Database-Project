@@ -25,7 +25,7 @@
 
 	<div id = "banner">
 	
-		<img src = "banner.jpg " alt "Mizzou Physcology"/>
+		<img src = "images/banner.jpg " alt "Mizzou Physcology"/>
 	
 	<div id = "top">
 	
