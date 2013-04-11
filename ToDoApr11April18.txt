@@ -1,0 +1,20 @@
+TO DO LIST 
+
+1. Update all pages of code with specification/readme at comment block at top of page --> Chris
+2. Merge redirect and head.php -- merge into function (users_type) --> Chris
+3. Add testing info to database.sql --> Chris
+4. userinfo.php --> finish and test  --- Breona 
+5. locations.php --> finish --> Ben
+6. experiments.php --> Adam
+	--view all experiments (link to sessions)
+	--add, edit, remove
+7. sessions.php --> Adam
+	--displays sessions for an experiment 
+		either in GET(from experiment.php)
+		or from a dropdown box (default to GET)
+8. myExperiments -- Corey
+	-- show all sessions 
+	-- allow user to cancel session
+
+9.  Style/CSS --> Chris
+	Jquery-ui
