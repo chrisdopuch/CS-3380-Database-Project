@@ -1,11 +1,9 @@
-<!--include redirect-->
-<?php include 'redirect.php';?>
 <!DOCTYPE html>
 <html>
 <head>
 <title> Home </title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 <style type = "text/css">
-
 #top
 {
 		text-align: center;
@@ -14,33 +12,21 @@
 		background-color: #FFD651;
 		text-color: black;
 }
-
 #Options
 {
 	text-align: left;
 	padding-right: 30px;
 	background-color: white;
 {
-
-<img src = "images/banner.jpg "/>
-
 </style>
+
 </head>
 <body>
-	<div id = "banner">
-	
-		<img src = "banner.jpg " alt "Mizzou Physcology"/>
-	
-	<div id = "top">
-	
-		<a href = " ">My Studies</a>
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<a href = " ">All Studies</a>
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<a href = " ">My Profile</a>
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<a href = "logout.php">Logout</a>
-		
+<?php
+//include header
+include 'header.php';
+top("experimenter");
+?>
 	<div id = "Options">
 	
 			<div id = "MyStudies">
@@ -52,13 +38,27 @@
 					</br>
 							&nbsp;&nbsp;&nbsp;&nbsp;
 					-View, add, or change timeslots
+					</br>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+					-Grant or deny participant credit
+					</br>
+					</br>
 		
 				<div id = "AllStudies">
 					
 					<a href = " ">All Studies</a>
 					</br>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-						-View all studies available
+						-View all studies available to participants
+					</br>
+					</br>
+				
+				<div id = "AddNewStudy">
+				
+					<a href = " ">Add New Study</a>
+					</br>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+						-Create a new study
 					</br>
 					</br>
 		

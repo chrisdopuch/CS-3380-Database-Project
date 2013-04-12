@@ -16,9 +16,9 @@ session_start();
 if(isset($_SESSION['username'])){ 
 	$user_type = $_SESSION['username'];
 	if($user_type == "experimenter"){
-		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepageadmin.php");
+		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
 	} else {
-		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepagepart.php");
+		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
 	}
 }
 
@@ -70,10 +70,10 @@ if (isset($_POST['submit'])){
 	
 	//redirect to home page
 	if($user_type == "experimenter"){
-		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepageadmin.php");
+		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
 		
 	} else {
-		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepagepart.php");
+		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
 	}
 }
 ?>

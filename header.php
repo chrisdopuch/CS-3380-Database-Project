@@ -11,7 +11,7 @@ This is the function you should call immediately after including the file
 Input: the type of user intended to use the page, should be either "experimenter" or "participant" 
 Output: html for the header
 */
-function header($user_type){
+function top($user_type){
 	//start the session
 	session_start();
 	
@@ -39,6 +39,9 @@ function header($user_type){
 		}
 	}
 
+	//print banner image
+	echo "<div id = \"banner\">\n<img src = \"images/banner.jpg\" alt=\"Mizzou Physcology\"/>\n</div>\n";
+	
 	//build header
 	echo "<header>\n<div id=\"headerLinksDiv\">\n";
 	
@@ -51,8 +54,10 @@ function header($user_type){
 			echo "<a class=\"headerLinks\" href=\"eUser.php\">My Account</a>\n";
 		}
 		else{
+			echo "<a class=\"headerLinks\" href=\"pHome.php\">Home</a>\n";
 			echo "<a class=\"headerLinks\" href=\"signup.php\">Sign Up</a>\n";
-			echo "<a class=\"headerLinks\" href=\"participant_sessions.php\">My Sessions</a>\n";
+			echo "<a class=\"headerLinks\" href=\"pSessions.php\">My Sessions</a>\n";
+			echo "<a class=\"headerLinks\" href=\"pUser.php\">My Account</a>\n";
 		}
 	
 	//finish header
