@@ -1,35 +1,61 @@
 <!-- 	
-This is the header that will be displayed on top of all the pages in our website
-It dynamically generates which links to display in the header
+This file should be included on every page except index.php and registration.php
+It does three things:
+1. Checks if user is logged in and if not, redirect to index.php
+2. Finds what type of user they are, and if they don't belong on that page, redirect them to the appropriate Home.php file
+3. Display the header based on what kind of user
  -->
 <?php
-
-//get user name
-$user = $_SESSION['username'];
-
-//get user type
-$user_type = $_SESSION['user_type'];
-
 /*
-//if you want to test this header out before the login process is working, uncomment this block, and comment out everything else in the php block
-$user_type = "experimenter";
+This is the function you should call immediately after including the file
+Input: the type of user intended to use the page, should be either "experimenter" or "participant" 
+Output: html for the header
 */
-?>
-<header>
-	<div id="headerLinksDiv">
-		<a class="headerLinks" href="home.php">Home</a>
-		<?php
+function header($user_type){
+	//start the session
+	session_start();
+	
+	//validate argument input
+	if($user_type != "experimenter" && $user_type != "participant"){
+		//print error message
+		echo "<script type=\"javascript\">alert('Error: the input to header(user_type) must be a string containing either participant or experimenter')</script>\n";
+		return;
+	}
+
+	//check if a user is logged in or not
+	if(!isset($_SESSION['username'])){
+		//if no user is logged on, redirect to the login page
+		header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php");
+	}
+	
+	//make sure the user is on a page they are supposed to be on
+	//if the user type requested by the calling page isn't the same as the user's type
+	if($user_type != $_SESSION['user_type']){
+		//redirect to the proper home page
 		if($user_type == "experimenter"){
-			echo "<a class=\"headerLinks\" href=\"experiments.php\">Experiments</a>\n";
-			echo "<a class=\"headerLinks\" href=\"sessions.php\">Sessions</a>\n";
-			echo "<a class=\"headerLinks\" href=\"users.php\">Users</a>\n";
+			header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
+		} else {
+			header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
+		}
+	}
+
+	//build header
+	echo "<header>\n<div id=\"headerLinksDiv\">\n";
+	
+	//Dynamically generate content for header based on user type
+	if($user_type == "experimenter"){
+			echo "<a class=\"headerLinks\" href=\"eHome.php\">Home</a>\n";
+			echo "<a class=\"headerLinks\" href=\"eExperiments.php\">Experiments</a>\n";
+			echo "<a class=\"headerLinks\" href=\"eSessions.php\">Sessions</a>\n";
+			echo "<a class=\"headerLinks\" href=\"eUsers.php\">Users</a>\n";
+			echo "<a class=\"headerLinks\" href=\"eUser.php\">My Account</a>\n";
 		}
 		else{
 			echo "<a class=\"headerLinks\" href=\"signup.php\">Sign Up</a>\n";
 			echo "<a class=\"headerLinks\" href=\"participant_sessions.php\">My Sessions</a>\n";
 		}
-		?>
-		<a class="headerLinks" href="account.php">My Account</a>
-		<a id="headerLogout" href="logout.php">Logout</a>
-	</div>
-</header>
+	
+	//finish header
+	echo "<a id=\"headerLogout\" href=\"logout.php\">Logout</a>\n</div>\n</header>\n";
+}
+?>
