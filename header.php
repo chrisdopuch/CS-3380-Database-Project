@@ -18,12 +18,12 @@ function top($user_type){
 	//validate argument input
 	if($user_type != "experimenter" && $user_type != "participant"){
 		//print error message
-		echo "<script type=\"javascript\">alert('Error: the input to header(user_type) must be a string containing either participant or experimenter')</script>\n";
+		echo "<script>alert(\"Error: the input to header(user_type) must be a string containing either participant or experimenter\");</script>\n";
 		return;
 	}
 
-	//check if a user is logged in or not
-	if(!isset($_SESSION['username'])){
+	//check if a user is logged in or not, and if a type has been set
+	if(!isset($_SESSION['username']) || !isset($_SESSION['user_type'])){
 		//if no user is logged on, redirect to the login page
 		header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php");
 	}
