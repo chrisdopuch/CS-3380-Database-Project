@@ -14,10 +14,10 @@ session_start();
 
 //check if already logged in, and redirect
 if(isset($_SESSION['username'])){ 
-	$user_type = $_SESSION['user_type'];
+	$user_type = trim($_SESSION['user_type']);
 	if($user_type == "experimenter"){
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
-	} else {
+	} else if($user_type == "participant") {
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
 	}
 }
@@ -72,7 +72,7 @@ if (isset($_POST['submit'])){
 	if($user_type == "experimenter"){
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
 		
-	} else {
+	} else if ($user_type == "participant"){
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
 	}
 }

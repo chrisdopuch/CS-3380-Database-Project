@@ -4,7 +4,6 @@
 <title> Home </title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 <style type = "text/css">
-
 #top
 {
 		text-align: center;
@@ -13,14 +12,12 @@
 		background-color: #FFD651;
 		text-color: black;
 }
-
 #Options
 {
 	text-align: left;
 	padding-right: 30px;
 	background-color: white;
 {
-
 </style>
 </head>
 <body>

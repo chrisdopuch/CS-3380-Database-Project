@@ -21,20 +21,24 @@ function top($user_type){
 		echo "<script>alert(\"Error: the input to header(user_type) must be a string containing either participant or experimenter\");</script>\n";
 		return;
 	}
-
-	//check if a user is logged in or not, and if a type has been set
-	if(!isset($_SESSION['username']) || !isset($_SESSION['user_type'])){
+	
+	//check if a user is logged in or not
+	if(!isset($_SESSION['username'])){
 		//if no user is logged on, redirect to the login page
 		header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php");
 	}
 	
+	//get session user type and name
+	$session_username = trim($_SESSION['username']);
+	$session_user_type = trim($_SESSION['user_type']);
+	
 	//make sure the user is on a page they are supposed to be on
 	//if the user type requested by the calling page isn't the same as the user's type
-	if($user_type != $_SESSION['user_type']){
+	if($user_type != $session_user_type){
 		//redirect to the proper home page
-		if($user_type == "experimenter"){
+		if($user_type == "participant"){
 			header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
-		} else {
+		} else if($user_type == "experimenter") {
 			header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
 		}
 	}

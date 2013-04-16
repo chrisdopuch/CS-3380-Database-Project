@@ -19,7 +19,6 @@
 	background-color: white;
 {
 </style>
-
 </head>
 <body>
 <?php
