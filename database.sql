@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS database.users;
 DROP SCHEMA IF EXISTS database;
 
 CREATE SCHEMA database;
-SET search_path to database;
+SET search_path TO database;
 
 CREATE TABLE users (
 username		VARCHAR(50) NOT NULL PRIMARY KEY,
@@ -57,3 +57,15 @@ eid				INTEGER REFERENCES database.experimenters(eid) ON DELETE CASCADE,
 expid			INTEGER REFERENCES database.experiments(expid) ON DELETE CASCADE,
 pid				INTEGER REFERENCES database.participants(pid)
 );
+
+/*
+Insert test data into database for use by developers
+Users are easy enough to be added through registration, and edited on my account page
+same goes for sessions soon
+*/
+INSERT INTO experiments VALUES(1, 100, "experiment 1", "none");
+INSERT INTO experiments VALUES(2, 50, "experiment 2", "none");
+INSERT INTO locations VALUES(1, 101, "Student Center");
+INSERT INTO locations VALUES(1, 102, "McAlester");
+
+
