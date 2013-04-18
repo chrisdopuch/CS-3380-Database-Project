@@ -1,12 +1,7 @@
-<!--include redirect-->
-<?php include 'redirect.php';?>
 <!DOCTYPE html>
-
 <head>
 <title>Locations</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<form method='POST' action="<? $_SERVER['PHP_SELF'] ?>">
-
 <!--include the style sheet for the website-->
 <link rel="stylesheet" type="text/css" href="style.css" />
 <style type = "text/css">
@@ -27,6 +22,9 @@
 </style>
 </head>
 <body>
+<?php include 'header.php';
+top('experimenter');
+?>
 
 <div id="container">
         <div id="content">
@@ -34,24 +32,21 @@
 
 <?php
 
-header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php"); // from template.php 
-top('experimenter');    // from template.php
-
-
 //set error reporting
 ERROR_REPORTING(E_ALL);
 ini_set("display_errors", 1);
-session_start();
 
 //check if already logged in, and redirect
 if(isset($_SESSION['username'])){
-        $user_type = $_SESSION['username'];
+        $user_type = $_SESSION['user_type'];
         if($user_type == "experimenter")
         {
 
         // connect to database, Counld NOT use the "include connect.php" due to the use of the variable $conn when I created this program
-        $conn = pg_connect("host=dbhost-pgsql.cs.missouri.edu user=cs3380sp13grp11 password=KnV7FH9kfq-ro  dbname=cs3380sp13grp11");
-
+        //$conn = pg_connect("host=dbhost-pgsql.cs.missouri.edu user=cs3380sp13grp11 password=KnV7FH9kfq-ro  dbname=cs3380sp13grp11");
+		include 'connect.php';
+		
+		
         if (!$conn)
                 {
                 die("Failed to connect to database: " . pg_last_error($conn) );  // error checking 
