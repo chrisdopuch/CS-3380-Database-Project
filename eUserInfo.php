@@ -4,78 +4,76 @@ session_start();
 
 if (isset($_POST['submit'])){
 	//connect to DB
+	
 	include 'connect.php';
 	
 	//get and sanitize the input
 	$user = htmlspecialchars($_POST['username']);
 	$password = htmlspecialchars($_POST['password']);
 	$newpassword = htmlspecialchars($_POST['newpassword']);
-	$password_confirm = htmlspecialchars($_POST['confirm-password']);
+	$password_confirm = htmlspecialchars($_POST['password_confirm']);
 	$email = htmlspecialchars($_POST['email']);
 	$newemail = htmlspecialchars($_POST['newemail']);
 	$newemail_confirm = htmlspecialchars($POST_['newemail_confirm']);
 
-	//check if password was actually entered
-	if($newpassword == ""){
-		echo "Error: No password entered\n<br>\n";
-		return;
+	if($username != " ")
+	{
+		$result = pg_prepare($conn, "update_username","UPDATE database.users SET $username = $1 WHERE database.users = $1");
+		$result = pg_execute($conn, "update_username", array($users)); 
+		echo "You have successfully changed your username";
 	}
 	
 	//check if passwords match
-	if($newpassword != $password_confirm){
+	if($newpassword != $password_confirm)
+	{
 		echo "Error: Passwords do not match, please try again\n<br >\n";
 		return;
 	}
 	
+	//If password match, update changed password in database
 	if($newpassword == $password_confirm)
 	{
-		$result = pg_prepare($conn, "UPDATE users SET password = '$newpassword' where username = '$username'");
+		//seed random number generator
+		mt_srand();
+	
+		//create random hashed salt value, and create password hash with salt
+		$salt = sha1(mt_rand());
+		$pwhash = sha1($salt . $password);
+		
+		$result = pg_prepare($conn, "update_password", "UPDATE database.users SET password = '$newpassword' where username = '$username'");
+		$result = pg_execute($conn, "update_password", array($username, $pwhash, $salt));
 		echo "You have successfully changed your password";
 		echo "Click <a href 'homepageadmin.php'>here</a>\n";
 	}
 	
-	//check if email was actually entered
-	if($newemail == ""){
-		echo "Error: No email entered\n<br>\n";
-		return;
-	}
-	
-	//check if passwords match
-	if($newemail != $newemail_confirm){
+	//check if e-mail match
+	if($newemail != $newemail_confirm)
+	{
 		echo "Error: Emails do not match, please try again\n<br >\n";
 		return;
 	}
 	
-	//If email match, update email in database
+	//If email match, update changed email in database
 	if($newemail == $newemail_confirm)
 	{
-		$result = pg_prepare($conn, "UPDATE users SET email = '$newemail' where username = '$username'");
+		$result = pg_prepare($conn, "email", "UPDATE users SET email = '$newemail' where username = '$username'");
+		$result = pg_execute($conn, "email", array($username, $email));
 		echo "You have successfully changed your email";
+		echo "Click <a href 'homepageadmin.php'>here</a>\n";
 	}
 	
 	$_SESSION['user_type'] = $user_type;
 	
 	//redirect to home page
-	if($user_type == "experimenter"){
+	if($user_type == "experimenter")
+	{
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepageadmin.php");
-	} else {
+	} 
+	else
+	{
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepagepart.php");
 	}
-	//seed random number generator
-	mt_srand();
-	
-	//create random hashed salt value, and create password hash with salt
-	$salt = sha1(mt_rand());
-	$pwhash = sha1($salt . $password);
-	
-	//add user to the users table
-	$result = pg_prepare($conn, "info", "INSERT INTO database.users VALUES ($1, $2, $3, $4, $5)");
-	$result = pg_execute($conn, "info", array($user, $pwhash, $salt, $user_type, $email));
-		
-	//log the username and type in session
-	$_SESSION['username'] = $user;
-	$_SESSION['user_type'] = $user_type;
-	
+
 	session_write_close();
 	
 }
@@ -112,7 +110,7 @@ Password:
 	<input type ='text' name='newpassword' ></input>
 	</br>
 ConfirmPassword:
-	<input type ='text' name='passwordconfirm' ></input>
+	<input type ='text' name='password_confirm' ></input>
 	</br>
 Email:
 	<input type ='text' name='newemail' ></input>
