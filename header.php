@@ -56,14 +56,14 @@ function top($user_type){
 			echo "<a class=\"headerLinks\" href=\"eSessions.php\">Sessions</a>\n";
 			echo "<a class=\"headerLinks\" href=\"eLocations.php\">Locations</a>\n";
 			echo "<a class=\"headerLinks\" href=\"eReports.php\">Reports</a>\n";
-			echo "<a class=\"headerLinks\" href=\"eUsers.php\">Users</a>\n";
+			echo "<a class=\"headerLinks\" href=\"eUserInfo.php\">Users</a>\n";
 			echo "<a class=\"headerLinks\" href=\"eUser.php\">My Account</a>\n";
 		}
 		else{
 			echo "<a class=\"headerLinks\" href=\"pHome.php\">Home</a>\n";
 			echo "<a class=\"headerLinks\" href=\"signup.php\">Sign Up</a>\n";
 			echo "<a class=\"headerLinks\" href=\"pSessions.php\">My Sessions</a>\n";
-			echo "<a class=\"headerLinks\" href=\"pUser.php\">My Account</a>\n";
+			echo "<a class=\"headerLinks\" href=\"pUserInfo.php\">My Account</a>\n";
 		}
 	
 	//finish header
