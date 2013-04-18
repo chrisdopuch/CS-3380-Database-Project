@@ -9,28 +9,35 @@ Experimenters can view experiments, sessions, sessions by experiment, participan
 <?php include 'connect.php';?>
 <!--include the style sheet for the website-->
 <link rel="stylesheet" type="text/css" href="style.css">
+<style>
+button{
+width:25px;
+}
+</style>
 <!--include the jQuery library-->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type='text/javascript'>
+<script src="jslibs/jquery-1.9.1.min.js"></script>
+<script>
 //do this function when the page is fully loaded
 $(document).ready(function() {
 	//if the report select changes, do this function
-	$("#reportSelect").change(function(eventData) {
+	$('#reportSelect').change(function(eventData) {
+		$('#extraOptions input, #extraOptions select').detach();
+		$('#extraOptions').html('');
 		//dynamically generate additional report options
-		if($("#reportSelect").val() == "experiments"{
-			$("#reportForm").append(
+		if($('#reportSelect').val() == 'experiments'){
+			$('#extraOptions').append(
 				'<input type="radio" name="options" value="all">Show All Experiments<br />',
 				'<input type="radio" name="options" value="my">Show My Experiments<br />'
 			);
 		}
-		else if($("#reportSelect").val() == "sessions"{
-			$("#reportForm").append(
+		else if($('#reportSelect').val() == 'sessions'){
+			$('#extraOptions').append(
 				'<input type="radio" name="options" value="all">Show All Sessions<br />',
 				'<input type="radio" name="options" value="my">Show My Sessions<br />'
 			);
 		}
-		else if($("#reportSelect").val() == "participants"{
-			$("#reportForm").append(
+		else if($('#reportSelect').val() == "participants"){
+			$('#extraOptions').append(
 				'<input type="radio" name="options" value="all">Show All Participants<br />',
 				'<input type="radio" name="options" value="my">Show Participants by Experiment<br />',
 				'<select name="experiment">',
@@ -52,20 +59,20 @@ $(document).ready(function() {
 				
 			);
 		}
-		else if($("#reportSelect").val() == "contacts"{
-			$("#reportForm").append(
+		else if($('#reportSelect').val() == 'contacts'){
+			$('#extraOptions').append(
 				'<input type="radio" name="options" value="all">Show All Experiments<br />',
 				'<input type="radio" name="options" value="my">Show My Experiments<br />'
 			);
 		}
-		else if($("#reportSelect").val() == "experimenters"{
-			$("#reportForm").append(
+		else if($('#reportSelect').val() == 'experimenters'){
+			$('#extraOptions').append(
 				'<input type="radio" name="options" value="all">Show All Experiments<br />',
 				'<input type="radio" name="options" value="my">Show My Experiments<br />'
 			);
 		}
-		else if($("#reportSelect").val() == "users"{
-			$("#reportForm").append(
+		else if($('#reportSelect').val() == 'users'){
+			$('#extraOptions').append(
 				'<input type="radio" name="options" value="all">Show All Experiments<br />',
 				'<input type="radio" name="options" value="my">Show My Experiments<br />'
 			);
@@ -91,8 +98,10 @@ top("experimenter") ?>
 				<option value="contacts">Contact List</option>
 				<option value="experimenters">All Experimenters</option>
 				<option value="users">All Users</option>
-			</select>
-			<button type='submit' value='Submit' name='submit' />
+			</select><br />
+			<div id="extraOptions">
+			</div>
+			<button type='submit' value='Submit' name='submit' ><br />
 		</form>
 	</div>
 </div>
