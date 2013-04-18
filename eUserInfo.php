@@ -1,5 +1,11 @@
 <?php
 
+//This user info page is for the experiments to be able to update/change their contact information, including their username,
+//password, and email address. It checks if there was a new username entered and if so it is udapted and stored in the database.
+//The password and email both have confirmations to be sure the user entered the correct information. The code checks that the new 
+//password and email match the confirmed password and email, respectively. If the new field for the password or email match the 
+//confirming fields then it is updated in the database. Since the user is an experimenter they areredirected back to the experimeters home page.
+
 session_start();
 
 if (isset($_POST['submit'])){
@@ -65,14 +71,7 @@ if (isset($_POST['submit'])){
 	$_SESSION['user_type'] = $user_type;
 	
 	//redirect to home page
-	if($user_type == "experimenter")
-	{
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepageadmin.php");
-	} 
-	else
-	{
-		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/homepagepart.php");
-	}
 
 	session_write_close();
 	
