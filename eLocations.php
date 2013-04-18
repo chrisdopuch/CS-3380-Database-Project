@@ -39,18 +39,9 @@ ini_set("display_errors", 1);
 //check if already logged in, and redirect
 if(isset($_SESSION['username'])){
         $user_type = $_SESSION['user_type'];
-        if($user_type == "experimenter")
-        {
-
-        // connect to database, Counld NOT use the "include connect.php" due to the use of the variable $conn when I created this program
-        //$conn = pg_connect("host=dbhost-pgsql.cs.missouri.edu user=cs3380sp13grp11 password=KnV7FH9kfq-ro  dbname=cs3380sp13grp11");
+		
+		//connect to DB
 		include 'connect.php';
-		
-		
-        if (!$conn)
-                {
-                die("Failed to connect to database: " . pg_last_error($conn) );  // error checking 
-                }
 
         $name = $_POST['query'];
         $type = 3;      // can be taken out but just used as a continuity check and is used throughout the program
@@ -121,7 +112,7 @@ function to_table($row, $type)
                 $lid = $row['lid'];
 
         // delete button        
-        echo "<td><form action = delete.php onsubmit='return confirmdelete();' method='POST'></a>
+        echo "<td><form action='delete.php' onsubmit='return confirmdelete();' method='POST'></a>
         <input type='submit' name='submit' value= 'Delete' />";
         echo "<input type='hidden' name='lid' value= $lid />";
         echo "<input type='hidden' name='type' value=$type /></form>";
@@ -129,7 +120,7 @@ function to_table($row, $type)
         echo "</form>";
 
         // update button
-        echo "<form action = update.php method='POST'></a>
+        echo "<form action='update.php' method='POST'></a>
         <input type='submit' name='submit' value= 'Update' />";
         echo "<input type='hidden' name='lid' value= $lid />";
         echo "<input type='hidden' name='type' value=$type /></form>";
