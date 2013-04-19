@@ -19,12 +19,16 @@ email			VARCHAR(50)
 
 CREATE TABLE participants (
 pid 			SERIAL PRIMARY KEY,
+first_name		CHAR(50),
+middle_name		CHAR(50),
+last_name		CHAR(50),
 address 		VARCHAR(100),
 phone_number 	NUMERIC,
 ethnicity		CHAR(20),
 gender			CHAR(6),
 age				NUMERIC,
 education 		NUMERIC,
+contact_again	BOOLEAN,
 username		VARCHAR REFERENCES database.users(username) ON DELETE CASCADE
 );
 
@@ -37,7 +41,9 @@ requirements	VARCHAR(500)
 
 CREATE TABLE experimenters (
 eid				SERIAL PRIMARY KEY,
-name			CHAR(50),
+first_name		CHAR(50),
+middle_name		CHAR(50),
+last_name		CHAR(50),
 username 		VARCHAR(50) REFERENCES database.users(username) ON DELETE CASCADE
 );
 
@@ -63,9 +69,9 @@ Insert test data into database for use by developers
 Users are easy enough to be added through registration, and edited on my account page
 same goes for sessions soon
 */
-INSERT INTO experiments VALUES(1, 100, "experiment 1", "none");
-INSERT INTO experiments VALUES(2, 50, "experiment 2", "none");
-INSERT INTO locations VALUES(1, 101, "Student Center");
-INSERT INTO locations VALUES(1, 102, "McAlester");
+INSERT INTO experiments VALUES(1, 100, 'experiment 1', 'none');
+INSERT INTO experiments VALUES(2, 50, 'experiment 2', 'none');
+INSERT INTO locations VALUES(1, 101, 'Student Center');
+INSERT INTO locations VALUES(2, 102, 'McAlester');
 
 
