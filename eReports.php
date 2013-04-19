@@ -16,6 +16,9 @@ width:25px;
 </style>
 <!--include the jQuery library-->
 <script src="jslibs/jquery-1.9.1.min.js"></script>
+<!-- include data table library
+for reference: http://www.datatables.net/index -->
+<script src="jslibs/jquery.dataTables.min.js"></script>
 <script>
 //do this function when the page is fully loaded
 $(document).ready(function() {
@@ -65,12 +68,6 @@ $(document).ready(function() {
 				'<input type="radio" name="options" value="my">Show My Experiments<br />'
 			);
 		}
-		else if($('#reportSelect').val() == 'experimenters'){
-			$('#extraOptions').append(
-				'<input type="radio" name="options" value="all">Show All Experiments<br />',
-				'<input type="radio" name="options" value="my">Show My Experiments<br />'
-			);
-		}
 		else if($('#reportSelect').val() == 'users'){
 			$('#extraOptions').append(
 				'<input type="radio" name="options" value="all">Show All Experiments<br />',
@@ -101,7 +98,7 @@ top("experimenter") ?>
 			</select><br />
 			<div id="extraOptions">
 			</div>
-			<button type='submit' value='Submit' name='submit' ><br />
+			<input type='submit' value='Submit' name='submit' ><br />
 		</form>
 	</div>
 </div>
