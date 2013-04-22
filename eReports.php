@@ -68,42 +68,18 @@ $(document).ready(function() {
 <!--include the header-->
 <?php include 'header.php';
 //the argument for top() must be either "participant" or "experimenter"
-top("experimenter"); 
-//check which option was selected, and set selected variable
-if(isset($_POST['submit'])){
-	switch($_POST['reportType']){
-		case 'experiments':
-			$selected = '1';
-			break;
-		case 'sessions':
-			$selected = '2';
-			break;
-		case 'participants':
-			$selected = '3';
-			break;
-		case 'contacts':
-			$selected = '4';
-			break;
-		case 'experimenters':
-			$selected = '5';
-			break;
-		case 'users':
-			$selected = '6';
-			break;
-	}
-}
-?>
-<div id='main' class='clearfix'>
+top("experimenter") ?>
+<div>
 	<h2>Reports</h2><br />
 	<form action='eReports.php' method='POST' name='submit' id='reportForm'>
 		<h3 id="formHeader">Choose a report to view:</h3>
 		<select name='reportType' id="reportSelect">
-			<option value="experiments" <?php if($selected == '1') echo "selected"; ?>>Experiments</option>
-			<option value="sessions" <?php if($selected == '2') echo "selected"; ?>>Sessions</option>
-			<option value="participants"<?php if($selected == '3') echo "selected"; ?>>Participants</option>
-			<option value="contacts"<?php if($selected == '4') echo "selected"; ?>>Contact List</option>
-			<option value="experimenters"<?php if($selected == '5') echo "selected"; ?>>All Experimenters</option>
-			<option value="users"<?php if($selected == '6') echo "selected"; ?>>All Users</option>
+			<option value="experiments">Experiments</option>
+			<option value="sessions">Sessions</option>
+			<option value="participants">Participants</option>
+			<option value="contacts">Contact List</option>
+			<option value="experimenters">All Experimenters</option>
+			<option value="users">All Users</option>
 		</select><br />
 		<div id="extraOptions">
 		</div>
@@ -112,7 +88,7 @@ if(isset($_POST['submit'])){
 </div>
 <!--process form submisison -->
 <?php
-if(isset($_POST['submit'])){
+if(isset($_POST['submit']){
 	switch($_POST['reportType']){
 		case 'experiments':
 			$option = $_POST['options'];
@@ -173,54 +149,14 @@ if(isset($_POST['submit'])){
 		//create the table
 		make_table($result);
 	}
-	else{
-		echo "No results were returned by your query.";
-	}
-
 }
 ?>
-<?php
-	function make_table($result){
-		// Print the table headers
-		$row = pg_fetch_assoc($result);
-		
-		if (!$row)
-			return FALSE;
-		
-		echo '<table border="1">';
-		
-		echo "<tr>";
-		foreach($row as $key => $value)
-		{
-			echo "<th>$key</th>";
-		}
-
-		echo "</tr>";
-		
-		// Now print the data from the first row - otherwise
-		// that data is lost 
-		echo "<tr>";
-		foreach($row as $res)
-		{
-			echo "<td>$res</td>";
-		}
-		
-		echo "</tr>";
-
-		while($row = pg_fetch_assoc($result))
-		{
-			echo "<tr>";
-			
-			foreach($row as $res)
-			{
-				echo "<td>$res</td>";
-			}
-
-			echo "</tr>";
-		}
-	}
-?>
 <!--include the footer-->
-<?php if(!isset($_POST['submit']))include 'footer.php'; ?>
+<?php include 'footer.php'; ?>
 </body>
 </html>
+<?php
+	function make_table($result){
+		
+	}
+?>
