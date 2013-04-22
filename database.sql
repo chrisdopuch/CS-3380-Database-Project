@@ -73,5 +73,12 @@ INSERT INTO experiments VALUES(1, 100, 'experiment 1', 'none');
 INSERT INTO experiments VALUES(2, 50, 'experiment 2', 'none');
 INSERT INTO locations VALUES(1, 101, 'Student Center');
 INSERT INTO locations VALUES(2, 102, 'McAlester');
+INSERT INTO users VALUES("test_user1", "password_hash", "salt", "experimenter", "email@mail.com");
+INSERT INTO users VALUES("test_user2", "password_hash", "salt", "experimenter", "email@mail.com");
+INSERT INTO participants VALUES(1, "address", 555-555-5555, "ethnicity", "gender", 21, 16, "test_user1");
+INSERT INTO experimenters VALUES(1, "experimenter_person", "test_user2");
+INSERT INTO sessions VALUES(1, curdate(), curtime(), curtime()+100, 1, 1 1, 1);
+INSERT INTO sessions VALUES(2, curdate(), curtime(), curtime()+100, 2, 1 1, 1);
+
 
 
