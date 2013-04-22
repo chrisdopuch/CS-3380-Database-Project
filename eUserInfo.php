@@ -1,13 +1,56 @@
-<?php
 
+<!--
 //This user info page is for the experiments to be able to update/change their contact information, including their username,
 //password, and email address. It checks if there was a new username entered and if so it is udapted and stored in the database.
 //The password and email both have confirmations to be sure the user entered the correct information. The code checks that the new 
 //password and email match the confirmed password and email, respectively. If the new field for the password or email match the 
 //confirming fields then it is updated in the database. Since the user is an experimenter they areredirected back to the experimeters home page.
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title> User Info </title>
+<style>
 
-session_start();
+#image
+{
+	vertical-align: center;
+}
 
+</style>
+</head>
+<body>
+<?php include 'header.php';
+top("experimenter");?>
+
+	<div id = body>
+<?php include 'header.php'; ?>
+	<form method= 'POST' action= 'update.php'>
+	<br></br>
+Please enter contact information to change:
+	</br>
+Username:
+	<input type ='text' name='username' ></input>
+	</br>
+Password:
+	<input type ='text' name='newpassword' ></input>
+	</br>
+ConfirmPassword:
+	<input type ='text' name='password_confirm' ></input>
+	</br>
+Email:
+	<input type ='text' name='newemail' ></input>
+	</br> 
+Confirm Email:
+	<input type ='text' name='newemail_confirm' ></input>
+	</br> 
+	</br>
+	<input type='submit' name='submit' value='Submit' > </input>
+</form>
+</body>
+</html>
+<?php
 if (isset($_POST['submit'])){
 	//connect to DB
 	
@@ -77,52 +120,5 @@ if (isset($_POST['submit'])){
 	
 }
 ?>
-
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style.css" />
-<title> User Info </title>
-<style>
-
-#image
-{
-	vertical-align: center;
-}
-
-</style>
-</head>
-<body>
-	<div id = image>
-	<img src = "https://babbage.cs.missouri.edu/~cs3380sp13grp11/images/main.jpg " class = "center" />
-
-	<div id = body>
-<?php include 'header.php'; ?>
-	<form method= 'POST' action= 'update.php'>
-	<br></br>
-Please enter contact information to change:
-	</br>
-Username:
-	<input type ='text' name='username' ></input>
-	</br>
-Password:
-	<input type ='text' name='newpassword' ></input>
-	</br>
-ConfirmPassword:
-	<input type ='text' name='password_confirm' ></input>
-	</br>
-Email:
-	<input type ='text' name='newemail' ></input>
-	</br> 
-Confirm Email:
-	<input type ='text' name='newemail_confirm' ></input>
-	</br> 
-	</br>
-	<input type='submit' name='submit' value='Submit' > </input>
-</form>
-<?php include 'header.php'; ?>
-</body>
-</head>
-</html>
 
 
