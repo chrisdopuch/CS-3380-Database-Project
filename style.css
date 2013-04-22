@@ -27,20 +27,24 @@ width:100%;
 height:70px;
 font-size:small;
 font-style:italic;
+position: relative;
+margin-top: -70px; /* negative value of footer height */
+clear:both;
 }
 footer p{
 text-align:center;
 }
 
+#main { padding-bottom: 70px; }  /* must be same height as the footer */
 
-
-
-
+html{
+height:100%
+}
 body 
 {
 	margin: 0;
 	padding: 0;
-
+	height:100%;
 	color: #061C37;
 	background: #FFF;
 	background-image:url(images/background.png);
@@ -77,3 +81,15 @@ padding-left:10px;
 padding-right:10px;
 padding-bottom:5px;
 }
+
+/* CLEAR FIX*/
+.clearfix:after {content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;}
+.clearfix {display: inline-block;}
+/* Hides from IE-mac \*/
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
