@@ -31,6 +31,7 @@ top('experimenter');
         <p>&nbsp;</p>
 
 <?php
+include 'connect.php';
 
 //set error reporting
 ERROR_REPORTING(E_ALL);
@@ -43,27 +44,29 @@ if(isset($_SESSION['username'])){
 		//connect to DB
 		include 'connect.php';
 
-        $name = $_POST['query'];
+        //$name = $_POST['query'];
         $type = 3;      // can be taken out but just used as a continuity check and is used throughout the program
         $query = "SELECT * FROM database.locations ORDER BY building"; // querry will return all locations and order them by building name
 
-        if($button == update)   // if update button is depressed, prepare query
-                {
-                $query =   $result = pg_prepare($conn, 'prepare', $query); // prepare the update query
+        //if($button == update){   // if update button is depressed, prepare query
+                
+                $result = pg_prepare($conn, 'prepare', $query); // prepare the update query
                 if (!$result)
                         {
                         echo "Error with pg_prepare: " . pg_last_error(); // error checking
                         exit;
                         }
 
-                 $result = pg_execute($conn, "prepare", array( $lid)); // execute the update
+                 $result = pg_execute($conn, "prepare", array()); // execute the update
                  if(!$result)
                         {
                         echo "Error with pg_execute: " . pg_last_error(); // error checking
                         exit;
                         }
-                }
+        //        }
 
+		//this needs to be changed
+		//if isset($POST['delete'])
         else if($button == delete)      // if delete button is depressed, delete the selected row from DB
 		                {
                 $query = "DELETE FROM database.locations WHERE lid = $1";
@@ -76,7 +79,7 @@ if(isset($_SESSION['username'])){
                 echo "Error with pg_prepare: " . pg_last_error(); // error checking
                 exit;
                 }
-
+		
         $updatedname = $name . "%";
         $result = pg_execute($conn, "search", array( $updatedname )); // execute search query
 
