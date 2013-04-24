@@ -98,6 +98,59 @@ if (isset($_POST['submit'])){
 		return;
 	}
 	
+	//get additional info
+	$first = htmlspecialchars($_POST['first']);
+	if($first == ""){echo "Error: You must enter a first name\n<br>\n";
+		echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+		return;}
+	$middle = htmlspecialchars($_POST['middle']);
+	if($middle == ""){echo "Error: You must enter a middle name\n<br>\n";
+		echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+		return;}
+	$last = htmlspecialchars($_POST['last']);
+	if($last == ""){echo "Error: You must enter a last name\n<br>\n";
+		echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+		return;}
+	
+	//get participant info
+	if($user_type == "participant"){
+		$address = htmlspecialchars($_POST['address']);
+		if($address == ""){
+			echo "Error: You must enter an address\n<br>\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;}
+		$phone = htmlspecialchars($_POST['phone']);
+		if($phone == ""){
+			echo "Error: You must enter a phone number\n<br>\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;}
+		$ethnicity = htmlspecialchars($_POST['ethnicity']);
+		if($ethnicity == ""){
+			echo "Error: You must choose an ethnicity\n<br>\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;}
+		$gender = htmlspecialchars($_POST['gender']);
+		if($gender == ""){
+			echo "Error: You must choose a gender\n<br>\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;}
+		$age = htmlspecialchars($_POST['age']);
+		if($age == ""){
+			echo "Error: You must enter your age\n<br>\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;}
+		$grade = htmlspecialchars($_POST['grade']);
+		if($grade == ""){
+			echo "Error: You must enter a highest grade\n<br>\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;}
+		$contact = htmlspecialchars($_POST['contact']);
+		if($contact == ""){
+			echo "Error: You must specify if we can contact you again\n<br>\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;}
+	}
+	
 	//check if username is already in DB
 	$result = pg_prepare($conn, "check_user", "SELECT * FROM database.users WHERE $1 = username");
 	$result = pg_execute($conn, "check_user", array($user));
@@ -132,10 +185,38 @@ if (isset($_POST['submit'])){
 	//add user to the users table
 	$result = pg_prepare($conn, "info", "INSERT INTO database.users VALUES ($1, $2, $3, $4, $5)");
 	$result = pg_execute($conn, "info", array($user, $pwhash, $salt, $user_type, $email));
+	//make sure the query was successful
+	if(!$result){
+		echo "Error: registration of user failed\n<br />\n";
+		echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+		return;
+	}
 		
 	//log the username and type in session
 	$_SESSION['username'] = $user;
 	$_SESSION['user_type'] = $user_type;
+	
+	//enter user into either participant or experimenter table
+	if($user_type == "experimenter"){
+		$result = pg_prepare($conn, "experimenter", "INSERT INTO database.experimenters (first_name, middle_name, last_name, username) VALUES ($1, $2, $3, $4)");
+		$result = pg_execute($conn, "experimenter", array($first, $middle, $last, $user));
+		//make sure the query was successful
+		if(!$result){
+			echo "Error: registration of experimenter failed\n<br />\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;
+		}
+	}
+	else if ($user_type == "participant"){
+		$result = pg_prepare($conn, "participant", "INSERT INTO database.participants (first_name, middle_name, last_name, address, phone_number, ethnicity, gender, age, education, contact_again, username) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)");
+		$result = pg_execute($conn, "participant", array($first, $middle, $last, $address, $phone, $ethnicity, $gender, $age, $grade, $contact, $user));
+		//make sure the query was successful
+		if(!$result){
+			echo "Error: registration of participant failed\n<br />\n";
+			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
+			return;
+		}
+	}
 	
 	session_write_close();
 	
@@ -149,6 +230,8 @@ if (isset($_POST['submit'])){
 ?>
 </head>
 <body>
+<h2>Registration</h2>
+<p>Please fill out the registration form, all fields are required.</p>
 <form method='POST' action='registration.php'>
 Username <input type='text' name='username' /><br />
 Password <input type='password' name='password' /><br />
