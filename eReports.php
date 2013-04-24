@@ -41,7 +41,9 @@ $(document).ready(function() {
 			$('#extraOptions').append( //add to extra options the following html code
 				'<input type="radio" name="options" value="all">Show All Participants<br />',
 				'<input type="radio" name="options" value="by_exp">Show Participants by Experiment<br />',
-				'<select name="experiment">', //drop down menu for experiment
+				'<select name="experiment" id="experimentSelect">');
+			$('#experimentSelect').append(
+				//drop down menu for experiment
 				<?php
 					//query the DB to get all the experiments
 					$result = pg_prepare($conn, "experiments", "SELECT DISTINCT name FROM database.experiments ORDER BY name ASC");
