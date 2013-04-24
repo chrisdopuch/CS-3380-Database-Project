@@ -16,24 +16,18 @@ if (isset($_POST['submit']))
 	include 'connect.php';
 	
 	//Get input values
-	if(isset($_POST['username'])
-	{
-		$username = htmlspecialchars($_POST['username']);
-	} 
+	//$username = htmlspecialchars($_POST['username']);
 	$newpassword = htmlspecialchars($_POST['newpassword']);
 	$password_confirm = htmlspecialchars($_POST['password_confirm']);
 	$email = htmlspecialchars($_POST['email']);
 	$newemail = htmlspecialchars($_POST['newemail']);
-	$newemail_confirm = htmlspecialchars($POST_['newemail_confirm']);
+	$newemail_confirm = htmlspecialchars($_POST['newemail_confirm']);
 	
 	//Get current Variables
 	$current_username = $_SESSION['username'];
-	$current_pwhash = "SELECT pwhash FROM database.users WHERE username = '$current_username'";
-	$current_salt = "SELECT salt FROM database.users WHERE username = '$current_username'";
-	$current_email = "SELECT email FROM database.users WHERE username = '$current_username'";
 
 	//If username is set, update username. If not, error message.
-	if(isset($_POST['username'])
+	if ($username != " ");
 	{
 
 			$result = pg_prepare($conn, "update_username","UPDATE database.users SET username = $1 WHERE username = $2");
@@ -50,52 +44,51 @@ if (isset($_POST['submit']))
 				echo "pg_prepare failed: ".pg_last_error($conn);
 			}
 		
-	}	
-	//If no new password entered, skip
-	if($newpassword AND $password_confirm == " ")
-	{
-		return;
 	}
 	
-	//check if passwords match
-	if($newpassword != $password_confirm)
-	{
-		echo "Error: Passwords do not match, please try again\n<br >\n";
-		echo "Click <a href 'eUserInfo.php'>here to return to user info page</a>\n";
-		return;
-	}
 	
-	//If password match, update changed password in database
-	if($newpassword == $password_confirm)
+	if($newpassword AND $password_confirm != " ")
 	{
-		//seed random number generator
-		mt_srand();
-	
-		//create random hashed salt value, and create password hash with salt
-		$salt = sha1(mt_rand());
-		$pwhash = sha1($salt . $password);
-				
-		$result = pg_prepare($conn, "update_password", "UPDATE database.users SET pwhash = '$pwhash', salt = '$salt' WHERE username = '$current_username' AND pwhash = '$current_pwhash' AND salt = '$current_salt'");
-		$result = pg_execute($conn, "update_password", array($pwhash, $salt, $current_username, $current_pwhash, $current_salt));
-		
-		if($result != NULL)
+		//check if passwords match
+		if($newpassword != $password_confirm)
 		{
-			echo "You have successfully changed your password";
-		}
-		else
-		{
-			echo "Error: Password was not successfully changed.";
-			echo "pg_prepare failed: ".pg_last_error($conn);; 
+			echo "Error: Passwords do not match, please try again\n<br >\n";
+			echo "Click <a href 'eUserInfo.php'>here to return to user info page</a>\n";
 		}
 		
-		return;
-	}
-	
-	
-	//Check if new email entered, if not skip
-	if($newemail  AND $newemail_confirm == " ")
-	{
-		return;
+		//If password match, update changed password in database
+		if($newpassword == $password_confirm)
+		{
+			//seed random number generator
+			mt_srand();
+		
+			//create random hashed salt value, and create password hash with salt
+			$salt = sha1(mt_rand());
+			$pwhash = sha1($salt . $password);
+			
+			//Update pwhash in database
+			$result = pg_prepare($conn, "get_pwhash","SELECT pwhash FROM database.users WHERE username = $1");
+			$result = pg_execute($conn, "get_pwhash", array( $current_username));
+			$row = pg_fetch_assoc($result);
+			$pwhash = $row['pwhash'];
+			
+			//Update salt in database
+			$result = pg_prepare($conn, "get_salt","SELECT salt FROM database.users WHERE username = $1");
+			$result = pg_execute($conn, "get_salt", array( $current_username));
+			$row = pg_fetch_assoc($result);
+			$salt = $row['salt'];
+			
+			if($result != NULL)
+			{
+				echo "You have successfully changed your password";
+			}
+			else
+			{
+				echo "Error: Password was not successfully changed.";
+				echo "pg_prepare failed: ".pg_last_error($conn);; 
+			}
+			
+		}
 	}
 	
 	//check if e-mail match
@@ -103,21 +96,22 @@ if (isset($_POST['submit']))
 	{
 		echo "Error: Emails do not match, please try again\n<br >\n";
 		echo "Click <a href 'eUserInfophp'>here to return to user info page</a>\n";
-		return;
 	}
 		
 	//If email match, update changed email in database
 	if($newemail == $newemail_confirm)
-	{
-		
-			$result = pg_prepare($conn, "email", "UPDATE database.users SET email = '$newemail' WHERE username = '$current_username' AND email = $current_email'");
-			$result = pg_execute($conn, "email", array($newemail, $current_username, $current_email));
-			echo "You have successfully changed your email";
-			echo "Click <a href 'homepageadmin.php'>here</a>\n";
-	
+	{		
+			$result = pg_prepare($conn, "email","SELECT email FROM database.users WHERE username = $1");
+			$result = pg_execute($conn, "email", array( $current_username));
+			$row = pg_fetch_assoc($result);
+			$newemail = $row['email'];
+			
+			echo $newemail;
+			
 		if($result != NULL)
 		{
 			echo "You have successfully changed your email";
+			echo "Click <a href 'homepageadmin.php'>here</a>\n";
 		}
 		else
 		{
@@ -125,11 +119,9 @@ if (isset($_POST['submit']))
 			echo "pg_prepare failed: ".pg_last_error($conn);
 		}
 			
-		return;
 	
 	}
 	
-		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
 
 	session_write_close();
 	
@@ -157,7 +149,7 @@ Username:
 <?php echo $current_username; ?>
 	</br>
 Current Email:
-<?php echo $current_email; ?>
+<?php echo $newemail ?>
 	</br>
 Change Username:
 	<input type ='text' name='username' ></input>
