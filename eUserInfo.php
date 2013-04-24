@@ -6,9 +6,13 @@
 //password and email match the confirmed password and email, respectively. If the new field for the password or email match the 
 //confirming fields then it is updated in the database. Since the user is an experimenter they areredirected back to the experimeters home page.
 
+//Add username and email to the page for user to see already
+
+//Error: User was not successfully changedpg_prepare failed: ERROR: duplicate key value violates unique constraint "users_pkey" DETAIL: Key (username)=() already exists.
 session_start();
 
-if (isset($_POST['submit'])){
+if (isset($_POST['submit']))
+{
 	//Connect to Database
 	include 'connect.php';
 	
@@ -77,8 +81,8 @@ if (isset($_POST['submit'])){
 		$salt = sha1(mt_rand());
 		$pwhash = sha1($salt . $password);
 				
-		$result = pg_prepare($conn, "update_password", "UPDATE database.users SET pwhash = $1 AND salt = $2 WHERE username = $3");
-		$result = pg_execute($conn, "update_password", array($username, $pwhash, $current_pwhas, $salt, $current_salt));
+		$result = pg_prepare($conn, "update_password", "UPDATE database.users SET pwhash = '$pwhash', salt = '$salt' WHERE username = '$current_username' AND pwhash = '$current_pwhash' AND salt = '$current_salt'");
+		$result = pg_execute($conn, "update_password", array($pwhash, $salt, $current_username, $current_pwhash, $current_salt));
 		
 		if($result != NULL)
 		{
@@ -87,8 +91,10 @@ if (isset($_POST['submit'])){
 		else
 		{
 			echo "Error: Password was not successfully changed.";
-			echo "pg_last_error($conn)"; 
+			echo "pg_prepare failed: ".pg_last_error($conn);; 
 		}
+		
+		return;
 	}
 	
 	
@@ -109,13 +115,27 @@ if (isset($_POST['submit'])){
 	//If email match, update changed email in database
 	if($newemail == $newemail_confirm)
 	{
-		$result = pg_prepare($conn, "email", "UPDATE database.users SET email = $1 WHERE username = $2");
-		$result = pg_execute($conn, "email", array($username, $email, $current_email));
-		echo "You have successfully changed your email";
-		echo "Click <a href 'homepageadmin.php'>here</a>\n";
+		
+			$result = pg_prepare($conn, "email", "UPDATE database.users SET email = '$newemail' WHERE username = '$current_username' AND email = $current_email'");
+			$result = pg_execute($conn, "email", array($newemail, $current_username, $current_email));
+			echo "You have successfully changed your email";
+			echo "Click <a href 'homepageadmin.php'>here</a>\n";
+	
+		if($result != NULL)
+		{
+			echo "You have successfully changed your email";
+		}
+		else
+		{
+			echo "Error: Email was not successfully changed.";
+			echo "pg_prepare failed: ".pg_last_error($conn);
+		}
+			
+		return;
+	
 	}
 	
-	
+		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
 
 	session_write_close();
 	
@@ -134,17 +154,18 @@ if (isset($_POST['submit'])){
 			include 'header.php';
 			top("experimenter");
 		?>
-
-
-	<div id = body>
-	
-
-
+	<div id = 'form' class = 'clearfix'>
 	<form method= 'POST' action='eUserInfo.php'>
 	<br></br>
 Please enter contact information to change:
 	</br>
 Username:
+<?php echo $current_username; ?>
+	</br>
+Current Email:
+<?php echo $current_email; ?>
+	</br>
+Change Username:
 	<input type ='text' name='username' ></input>
 	</br>
 Password:
@@ -153,7 +174,7 @@ Password:
 ConfirmPassword:
 	<input type ='text' name='password_confirm' ></input>
 	</br>
-Email:
+Change Email:
 	<input type ='text' name='newemail' ></input>
 	</br> 
 Confirm Email:
@@ -161,10 +182,10 @@ Confirm Email:
 	</br> 
 	</br>
 	<input type='submit' name='submit' value='Submit' > </input>
-</form>
-<?php include 'footer.php'; ?>
+	
+	</form>
+	</div>
 </body>
-</head>
 </html>
 
 
