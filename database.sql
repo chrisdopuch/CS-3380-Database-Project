@@ -1,3 +1,5 @@
+/*This is the SQL file that creates our database. It also creates some test values*/
+
 DROP TABLE IF EXISTS database.sessions;
 DROP TABLE IF EXISTS database.experiments;
 DROP TABLE IF EXISTS database.experimenters;
@@ -24,7 +26,7 @@ middle_name		CHAR(50),
 last_name		CHAR(50),
 address 		VARCHAR(100),
 phone_number 	NUMERIC,
-ethnicity		CHAR(20),
+ethnicity		CHAR(30), /*proper nouns, stored with capitals*/
 gender			CHAR(7),
 age				NUMERIC,
 education 		NUMERIC,
