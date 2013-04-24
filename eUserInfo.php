@@ -8,7 +8,6 @@
 
 //Add username and email to the page for user to see already
 
-//Error: User was not successfully changedpg_prepare failed: ERROR: duplicate key value violates unique constraint "users_pkey" DETAIL: Key (username)=() already exists.
 session_start();
 
 if (isset($_POST['submit']))
@@ -17,7 +16,10 @@ if (isset($_POST['submit']))
 	include 'connect.php';
 	
 	//Get input values
-	$username = htmlspecialchars($_POST['username']);
+	if(isset($_POST['username'])
+	{
+		$username = htmlspecialchars($_POST['username']);
+	} 
 	$newpassword = htmlspecialchars($_POST['newpassword']);
 	$password_confirm = htmlspecialchars($_POST['password_confirm']);
 	$email = htmlspecialchars($_POST['email']);
@@ -26,37 +28,29 @@ if (isset($_POST['submit']))
 	
 	//Get current Variables
 	$current_username = $_SESSION['username'];
-	$current_pwhash = $_SESSION['pwhash'];
-	$current_salt = $_SESSION['salt'];
-	$current_email = $_SESSION['email'];
+	$current_pwhash = "SELECT pwhash FROM database.users WHERE username = '$current_username'";
+	$current_salt = "SELECT salt FROM database.users WHERE username = '$current_username'";
+	$current_email = "SELECT email FROM database.users WHERE username = '$current_username'";
 
-	//If no username entered, skip
-	if($username == " ")
+	//If username is set, update username. If not, error message.
+	if(isset($_POST['username'])
 	{
-		return;
-	}
-	
-	//Check if username is not empty
-	if($username != " ")
-	{
-		$result = pg_prepare($conn, "update_username","UPDATE database.users SET username = $1 WHERE username = $2");
-		$result = pg_execute($conn, "update_username", array($username, $current_username)); 
+
+			$result = pg_prepare($conn, "update_username","UPDATE database.users SET username = $1 WHERE username = $2");
+			$result = pg_execute($conn, "update_username", array($username, $current_username)); 
+			
+			if($result != NULL)
+			{
+				echo "You have successfully changed your username";
+				echo "Click <a href 'eUserInfophp'>here to return to user info page</a>\n";
+			}
+			else
+			{
+				echo "Error: User was not successfully changed";
+				echo "pg_prepare failed: ".pg_last_error($conn);
+			}
 		
-		if($result != NULL)
-		{
-			echo "You have successfully changed your username";
-			echo "Click <a href 'eUserInfophp'>here to return to user info page</a>\n";
-		}
-		else
-		{
-			echo "Error: User was not successfully changed";
-			echo "pg_prepare failed: ".pg_last_error($conn);
-		}
-		
-		return;
-	}
-		
-		
+	}	
 	//If no new password entered, skip
 	if($newpassword AND $password_confirm == " ")
 	{
