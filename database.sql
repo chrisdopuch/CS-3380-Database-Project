@@ -25,7 +25,7 @@ first_name		CHAR(50),
 middle_name		CHAR(50),
 last_name		CHAR(50),
 address 		VARCHAR(100),
-phone_number 	NUMERIC,
+phone_number 	VARCHAR(14),
 ethnicity		CHAR(30), /*proper nouns, stored with capitals*/
 gender			CHAR(7),
 age				NUMERIC,
@@ -71,16 +71,16 @@ Insert test data into database for use by developers
 Users are easy enough to be added through registration, and edited on my account page
 same goes for sessions soon
 */
-INSERT INTO experiments VALUES(1, 100, 'experiment 1', 'none');
-INSERT INTO experiments VALUES(2, 50, 'experiment 2', 'none');
-INSERT INTO locations VALUES(1, 101, 'Student Center');
-INSERT INTO locations VALUES(2, 102, 'McAlester');
+INSERT INTO experiments (payment, name, requirements) VALUES(100, 'experiment 1', 'none');
+INSERT INTO experiments (payment, name, requirements) VALUES(50, 'experiment 2', 'none');
+INSERT INTO locations (room, building) VALUES(101, 'Student Center');
+INSERT INTO locations (room, building) VALUES(102, 'McAlester');
 INSERT INTO users VALUES('test_user1', 'password_hash', 'salt', 'experimenter', 'email@mail.com');
 INSERT INTO users VALUES('test_user2', 'password_hash', 'salt', 'experimenter', 'email@mail.com');
-INSERT INTO participants VALUES(1, 'fname', 'mname', 'lname', 'address', 555-555-5555, 'ethnicity', 'male', 21, 16, 'false', 'test_user1');
-INSERT INTO experimenters VALUES(1, 'experimenter_person', 'test_user2');
-INSERT INTO sessions VALUES(1, CURRENT_DATE, CURRENT_TIME, CURRENT_TIME, 1, 1 , 1, 1);
-INSERT INTO sessions VALUES(2, CURRENT_DATE, CURRENT_TIME, CURRENT_TIME, 2, 1, 1, 1);
+INSERT INTO participants (first_name, middle_name, last_name, address, phone_number, ethnicity, gender, age, education, contact_again, username) VALUES('fname', 'mname', 'lname', 'address', 555-555-5555, 'ethnicity', 'male', 21, 16, 'false', 'test_user1');
+INSERT INTO experimenters (first_name, middle_name, last_name, username) VALUES('fname', 'mname', 'lname', 'test_user2');
+INSERT INTO sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES(CURRENT_DATE, CURRENT_TIME, CURRENT_TIME, 1, 1 , 1, 1);
+INSERT INTO sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES(CURRENT_DATE, CURRENT_TIME, CURRENT_TIME, 2, 1, 1, 1);
 
 
 
