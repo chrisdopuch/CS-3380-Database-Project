@@ -12,6 +12,12 @@ Input: the type of user intended to use the page, should be either "experimenter
 Output: html for the header
 */
 function top($user_type){
+
+	/* DEBUGGING ENVIRONMENT VARIABLE
+		When set to TRUE, debug tools will appear on the experimenter header.
+	*/
+	$debug = true;
+	
 	//start the session
 	session_start();
 	
@@ -57,6 +63,9 @@ function top($user_type){
 			echo "<a class=\"headerLinks\" href=\"eLocations.php\">Locations</a>\n";
 			echo "<a class=\"headerLinks\" href=\"eReports.php\">Reports</a>\n";
 			echo "<a class=\"headerLinks\" href=\"eUserInfo.php\">My Account</a>\n";
+			if ($debug){
+				echo "<a class=\"headerLinks\" href=\"dataedit.php\">DEBUG: Edit Data</a>\n";
+			}
 		}
 		else{
 			echo "<a class=\"headerLinks\" href=\"pHome.php\">Home</a>\n";
