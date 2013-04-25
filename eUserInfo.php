@@ -16,7 +16,7 @@ if (isset($_POST['submit']))
 	include 'connect.php';
 	
 	//Get input values
-	//$username = htmlspecialchars($_POST['username']);
+	$username = htmlspecialchars($_POST['username']);
 	$newpassword = htmlspecialchars($_POST['newpassword']);
 	$password_confirm = htmlspecialchars($_POST['password_confirm']);
 	$email = htmlspecialchars($_POST['email']);
@@ -26,7 +26,13 @@ if (isset($_POST['submit']))
 	//Get current Variables
 	$current_username = $_SESSION['username'];
 
+	
 	//If username is set, update username. If not, error message.
+	if($username == " ")
+	{	
+		continue;
+	}
+	
 	if ($username != " ");
 	{
 
@@ -46,6 +52,11 @@ if (isset($_POST['submit']))
 		
 	}
 	
+
+	if($newpassword || $password_confirm == " ")
+	{	
+		continue;
+	}
 	
 	if($newpassword AND $password_confirm != " ")
 	{
@@ -89,6 +100,11 @@ if (isset($_POST['submit']))
 			}
 			
 		}
+	}
+	
+	if($newemail || $newemail_confirm == " ")
+	{	
+		continue;
 	}
 	
 	//check if e-mail match
