@@ -32,6 +32,7 @@ function top($user_type){
 	if(!isset($_SESSION['username'])){
 		//if no user is logged on, redirect to the login page
 		header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php");
+		exit;
 	}
 	
 	//get session user type and name
@@ -42,10 +43,13 @@ function top($user_type){
 	//if the user type requested by the calling page isn't the same as the user's type
 	if($user_type != $session_user_type){
 		//redirect to the proper home page
+
 		if($user_type == "participant"){
 			header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
+			exit;
 		} else if($user_type == "experimenter") {
 			header("Location:  http://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
+			exit;
 		}
 	}
 

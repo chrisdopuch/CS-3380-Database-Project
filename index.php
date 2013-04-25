@@ -17,8 +17,10 @@ if(isset($_SESSION['username'])){
 	$user_type = trim($_SESSION['user_type']);
 	if($user_type == "experimenter"){
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
+		exit;
 	} else if($user_type == "participant") {
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
+		exit;
 	}
 }
 
@@ -71,9 +73,11 @@ if (isset($_POST['submit'])){
 	//redirect to home page
 	if($user_type == "experimenter"){
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
+		exit;
 		
 	} else if ($user_type == "participant"){
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
+		exit;
 	}
 }
 ?>
