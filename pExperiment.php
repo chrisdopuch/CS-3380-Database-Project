@@ -1,5 +1,5 @@
 <?php
-$connString = "host=dbhost-pgsql.cs.missouri.edu user=cs3380sp13grp11 dbname=cs3380sp13grp11 password=vTc9pwMw"; 
+$connString = "host=dbhost-pgsql.cs.missouri.edu user=cs4320sp13grp14 dbname=cs4320sp13grp14 password=vTc9pwMw"; 
 
 $dbconn = pg_connect($connString ) or die("Problem with connection to PostgreSQL:".pg_last_error());
 
@@ -42,51 +42,24 @@ top("participant");
 ?>
 	<?php
 	//get experiment info
-	$user_id = $_SESSION['userid'];
+	$expid = $_SESSION[''];
 	
-	$query1 = "SELECT expid, eid, session_date, start_time, end_time FROM sessions WHERE sid = $1";
+	$query1 = "SELECT name, expid FROM experiments WHERE expid = $1";
 	
-	$result1 = pg_query($dbconn, "getres", $query1);
+	$result1 = pg_query($dbconn, $query1);
 	$i =0;
 	//populates the table with the tours.
 	while ($row = pg_fetch_assoc($result1))
 	{
 	
-				$exp_id = $row['expid'];
-                        
-				$e_id = $row['eid'];
-				
-				$start_date = $row['session_date'];
-				
-				$start_time = $row['start_time'];
-				
-				$end_time = $row['end_time']:
-				
-				
-						
-				$query2 = "SELECT exp_id, name FROM experiment WHERE expid = $1";
-				
-				$prep2 = pg_prepare($dbconn, "res$i", $query2);
-
-                $result2 = pg_execute($dbconn, "res$i", array($e_id));
-
-                $row2 = pg_fetch_assoc ($result2);
-				
-				$exp_name = $row['name'];
-				
-				
-				
+		$name = $row['name'];
+		$expid = $row['expid'];
+		
+		
+		
 				echo "<tr id='row$i'>";
-				
-				echo "<td> $exp_name </td>";
-				
-				echo "<td> $e_id </td>";
 
-                echo "<td> $start_date </td>";
-				
-                echo "<td> $start_time </td>";
-
-                echo "<td> $end_time </td>";
+				echo "<td> $name </td>";
 						
 				echo "<td> <button onclick='deleteres($expid, $i)'> Delete </button></td>";
 				
@@ -94,7 +67,6 @@ top("participant");
 			echo "</tr>";
 $i++;
 	}
-?>
 </body>
 <script>
 //delete experiment row
