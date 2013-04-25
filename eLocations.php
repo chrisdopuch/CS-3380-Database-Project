@@ -47,44 +47,41 @@ switch ($action)
 	{
         //this action shows an editable form to the user
         case "add":
-		$val = 'add';// setting val to add so that it will come back to add after the info has been inserted
 				
-		if ($bool != 1)
-			{
-			$bool = 1;
-			echo"<form action='eLocations.php?action=add&val=".$val."' method='post'>";
+			
+			echo"<form action='eLocations.php?action=add_commit&val=".$val."' method='post'>";
 			echo"<table>";
-			//echo"<tr><td>Location ID:</td><td><input type='Integer' name='lid'></td></tr>";
 			echo"<tr><td>Room Number:</td><td><input type='Integer' name='room'></td></tr>";
 			echo"<tr><td>Building Name:</td><td><input type='text' name='building'></td></tr>";
 			echo"<tr><td colspan='1'><input type='submit' value='Submit'></td></tr>";
 			echo"</table>";
 			echo"</form>";
-			}
-		else
-			{
-	                //$lid = $_POST['lid'];
-	                $room = $_POST['room'];
-	                $building = $_POST['building'];
-	        	$query = 'INSERT INTO database.locations (room,building) VALUES ($1, $2)';
-			$result = pg_prepare($conn, "add", $query);
-			$result1 = pg_execute($conn, "add", array($room, $building));
-			
-        
-			if ($result1)
-                	        {
-                	         echo "\tLocation was successfully added. <br />\n";
-                	         echo "\tReturn to <a href='eLocations.php'>search page</a>.";
-                	        }
-                	else
-                	        {
-                	         echo "\tAdding the location FAILED: ".pg_last_error($conn)."<br />\n";
-                	         echo "\tReturn to <a href='eLocations.php'>search page</a>.";
-                	        }
-	
-			$bool = 0;
-			}
+		
+	      	
+       
              	break;
+	case "add_commit":
+
+			$lid = $_POST['lid'];
+			$room = $_POST['room'];
+                        $building = $_POST['building'];
+                        $query = "INSERT INTO database.locations (room, building) Values ($1, $2)";
+                        $result = pg_prepare($conn, "add", $query);
+                        $result1 = pg_execute($conn, "add", array($room, $building));
+
+
+                        if ($result1)
+                                {
+                                 echo "\tLocation was successfully added. <br />\n";
+                                 echo "\tReturn to <a href='eLocations.php'>search page</a>.";
+                                }
+                        else
+                                {
+                                 echo "\tAdding the location FAILED: ".pg_last_error($conn)."<br />\n";
+                                 echo "\tReturn to <a href='eLocations.php'>search page</a>.";
+                                }
+
+		break;
 	case "edit":
 	        //define the query to select the location of interest
                 $query = "SELECT * FROM database.locations WHERE lid = $1";
@@ -100,9 +97,9 @@ switch ($action)
         case "remove":
         	$query = "DELETE FROM database.locations WHERE lid = $1";
                 //prepare the query
-                $stmt = pg_prepare($conn, "delete_exp", $query);
+                $stmt = pg_prepare($conn, "delete_location", $query);
                 //execute query 
-                $result = pg_execute($conn, "delete_exp", array($val));
+                $result = pg_execute($conn, "delete_location", array($val));
                 if ($result)
 			{
                          echo "\tUpdate was successful. <br />\n";
@@ -122,11 +119,11 @@ switch ($action)
 		$lid = $_POST['lid'];
                 $room = $_POST['room'];
                 $building = $_POST['building'];
-                //define the query to update the city table
+                //define the query to update the location table
                 $query = "UPDATE database.locations SET (room, building) = ($2, $3) WHERE lid = $1";
                 //prepare the query
                 $stmt = pg_prepare($conn, "update_exp", $query);
-                //execute the query with user's values
+                //execute the query with location values
                 $result = pg_execute($conn, "update_exp", array($lid,$room, $building));
                 //Check to see if the query was successful
                 if ($result)
