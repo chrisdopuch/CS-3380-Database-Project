@@ -137,12 +137,12 @@ if(isset($_POST['submit'])){
 		case 'sessions':
 			$option = $_POST['options'];
 			if($option = "all"){
-				$query = "SELECT sid, (SELECT DISTINCT name FROM database.experiments as i WHERE i.expid = o.expid) as experiment_name, start_time, end_time, (Select first_name FROM database.experimenters as i WHERE i.eid = o.eid) as experimenter_name, (Select first_name FROM database.participants as i WHERE i.pid = o.pid) as participant_name, (SELECT building FROM database.locations as i WHERE i.lid = o.lid) as building, (SELECT room FROM database.locations as i WHERE i.lid = o.lid) as room  FROM database.sessions as o ORDER BY experiment_name asc";
+				$query = "SELECT sid, (Select name FROM database.experiment as i WHERE i.expid = o.expid) as experiment_name, start_time, end_time, (Select name FROM database.experimenters as i WHERE i.eid = o.eid) as experimenter_name, (Select name FROM database.participants as i WHERE i.pid = o.pid) as participant_name as experimenter_name (SELECT (building+' '+room) as location FROM database.locations as i WHERE i.lid = o.lid) as location  FROM database.sessions as o ORDER BY experiment_name asc";
 				$result = pg_prepare($conn, "all_sessions", $query);
 				$result = pg_execute($conn, "all_sessions", array());
 			} else if($option = "my"){
 				$username = $_SESSION['username'];
-				$query = "SELECT sid, (Select DISTINCT name FROM database.experiment as i WHERE i.expid = o.expid) as experiment_name, start_time, end_time, (Select first_name FROM database.experimenters as i WHERE i.eid = o.eid) as experimenter_name, (Select first_name FROM database.participants as i WHERE i.pid = o.pid) as participant_name FROM database.sessions as o WHERE 0.eid = (SELECT eid FROM database.experimenters WHERE username = $1) ORDER BY experiment_name asc";
+				$query = "SELECT sid, (Select name FROM database.experiment as i WHERE i.expid = o.expid) as experiment_name, start_time, end_time, (Select name FROM database.experimenters as i WHERE i.eid = o.eid) as experimenter_name, (Select name FROM database.participants as i WHERE i.pid = o.pid) as participant_name as experimenter_name  FROM database.sessions as o WHERE 0.eid = (SELECT eid FROM database.experimenters WHERE username = $1) ORDER BY experiment_name asc";
 				$result = pg_prepare($conn, "my_sessions", $query);
 				$result = pg_execute($conn, "my_sessions", array($username));
 			}
@@ -150,19 +150,18 @@ if(isset($_POST['submit'])){
 		case 'participants':
 			$option = $_POST['options'];
 			if($option = "all"){
-				$query = "SELECT pid, last_name, first_name, middle_name, username, address, phone_number,(SELECT email FROM database.users as i WHERE i.username = o.username) as email_address, ethnicity, gender, age, education FROM database.participants as o ORDER BY last_name asc";
+				$query = "SELECT pid, first_name, middle_name last_name, username, address, phone_number,(SELECT email FROM database.users as i WHERE i.username = o.username) as email_address, ethnicity, gender, age, education FROM database.participants as o ORDER BY expid asc";
 				$result = pg_prepare($conn, "all_participants", $query);
 				$result = pg_execute($conn, "all_participants", array());
 			} else if($option = "by_exp"){
 				$experiment = $_POST['experiment'];
-				//this is broken
-				$query = "SELECT pid, middle_name, last_name, first_name, username, address, phone_number, (SELECT email FROM database.users as i WHERE i.username = o.username) as email_address, ethnicity, gender, age, education FROM database.participants as o WHERE pid = (SELECT pid FROM database.sessions WHERE expid = (SELECT expid FROM database.experiments WHERE name = $1)) ORDER BY last_name asc";
+				$query = "SELECT pid, first_name, middle_name, last_name, username, address, phone_number, (SELECT email FROM database.users as i WHERE i.username = o.username) as email_address, ethnicity, gender, age, education FROM database.participants as o WHERE pid = (SELECT pid FROM database.sessions WHERE expid = (SELECT expid FROM database.experiments WHERE name = $1)) ORDER BY last_name asc";
 				$result = pg_prepare($conn, "by_exp_participants", $query);
 				$result = pg_execute($conn, "by_exp_participants", array($experiment));
 			}
 			break;
 		case 'contacts':
-			$query = "SELECT pid, last_name, middle_name, first_name, username, address, phone_number, (SELECT email FROM database.users as i WHERE i.username = o.username) as email_address, ethnicity, gender, age, education FROM database.participants as o ORDER BY last_name asc";
+			$query = "SELECT pid, first_name, middle_name, last_name, username, address, phone_number, (SELECT email FROM database.users as i WHERE i.username = o.username) as email_address, ethnicity, gender, age, education FROM database.participants as o ORDER BY expid asc";
 			$result = pg_prepare($conn, "contacts", $query);
 			$result = pg_execute($conn, "contacts", array());
 			break;

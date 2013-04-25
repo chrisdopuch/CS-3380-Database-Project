@@ -77,7 +77,7 @@ INSERT INTO locations (room, building) VALUES(101, 'Student Center');
 INSERT INTO locations (room, building) VALUES(102, 'McAlester');
 INSERT INTO users VALUES('test_user1', 'password_hash', 'salt', 'experimenter', 'email@mail.com');
 INSERT INTO users VALUES('test_user2', 'password_hash', 'salt', 'experimenter', 'email@mail.com');
-INSERT INTO participants (first_name, middle_name, last_name, address, phone_number, ethnicity, gender, age, education, contact_again, username) VALUES('fname', 'mname', 'lname', 'address', '(555)-555-5555', 'ethnicity', 'male', 21, 16, 'false', 'test_user1');
+INSERT INTO participants (first_name, middle_name, last_name, address, phone_number, ethnicity, gender, age, education, contact_again, username) VALUES('fname', 'mname', 'lname', 'address', 555-555-5555, 'ethnicity', 'male', 21, 16, 'false', 'test_user1');
 INSERT INTO experimenters (first_name, middle_name, last_name, username) VALUES('fname', 'mname', 'lname', 'test_user2');
 INSERT INTO sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES(CURRENT_DATE, CURRENT_TIME, CURRENT_TIME, 1, 1 , 1, 1);
 INSERT INTO sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES(CURRENT_DATE, CURRENT_TIME, CURRENT_TIME, 2, 1, 1, 1);
