@@ -304,14 +304,14 @@
 				//experiments table
 				case "experiments":
 					$name = $_POST['name'];
-					$payment = $_POST['username'];
-					$retuirements = $_POST['requirements'];
+					$payment = $_POST['payment'];
+					$requirements = $_POST['requirements'];
 
 					$query = "INSERT INTO database.experiments (name, payment, requirements) VALUES ($1, $2, $3)";
 					//prepare the query
 					$stmt = pg_prepare($conn, "insert_exp", $query);
 					//execute query 
-					$result = pg_execute($conn, "insert_exp", array($name, $payment, $requirement));
+					$result = pg_execute($conn, "insert_exp", array($name, $payment, $requirements));
 					break;
 
 				//participants table
