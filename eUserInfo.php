@@ -1,154 +1,18 @@
-<?php
+<!--This user info page is for the experiments to be able to update/change their contact information, including their username,
+password, and email address. It checks if there was a new username entered and if so it is udapted and stored in the database.
+The password and email both have confirmations to be sure the user entered the correct information. The code checks that the new 
+password and email match the confirmed password and email, respectively. If the new field for the password or email match the 
+confirming fields then it is updated in the database. Since the user is an experimenter they areredirected back to the experimeters home page.
+Add username and email to the page for user to see already
+Seperate ssessions for each thing to change
 
-//This user info page is for the experiments to be able to update/change their contact information, including their username,
-//password, and email address. It checks if there was a new username entered and if so it is udapted and stored in the database.
-//The password and email both have confirmations to be sure the user entered the correct information. The code checks that the new 
-//password and email match the confirmed password and email, respectively. If the new field for the password or email match the 
-//confirming fields then it is updated in the database. Since the user is an experimenter they areredirected back to the experimeters home page.
-
-//Add username and email to the page for user to see already
-
-session_start();
-
-if (isset($_POST['submit']))
-{
-	//Connect to Database
-	include 'connect.php';
-	
-	//Get input values
-	$username = htmlspecialchars($_POST['username']);
-	$newpassword = htmlspecialchars($_POST['newpassword']);
-	$password_confirm = htmlspecialchars($_POST['password_confirm']);
-	$email = htmlspecialchars($_POST['email']);
-	$newemail = htmlspecialchars($_POST['newemail']);
-	$newemail_confirm = htmlspecialchars($_POST['newemail_confirm']);
-	
-	//Get current Variables
-	$current_username = $_SESSION['username'];
-
-	
-	//If username is set, update username. If not, error message.
-	if($username == " ")
-	{	
-		continue;
-	}
-	
-	if ($username != " ");
-	{
-
-			$result = pg_prepare($conn, "update_username","UPDATE database.users SET username = $1 WHERE username = $2");
-			$result = pg_execute($conn, "update_username", array($username, $current_username)); 
-			
-			if($result != NULL)
-			{
-				echo "You have successfully changed your username";
-				echo "Click <a href 'eUserInfophp'>here to return to user info page</a>\n";
-			}
-			else
-			{
-				echo "Error: User was not successfully changed";
-				echo "pg_prepare failed: ".pg_last_error($conn);
-			}
-		
-	}
-	
-
-	if($newpassword || $password_confirm == " ")
-	{	
-		continue;
-	}
-	
-	if($newpassword AND $password_confirm != " ")
-	{
-		//check if passwords match
-		if($newpassword != $password_confirm)
-		{
-			echo "Error: Passwords do not match, please try again\n<br >\n";
-			echo "Click <a href 'eUserInfo.php'>here to return to user info page</a>\n";
-		}
-		
-		//If password match, update changed password in database
-		if($newpassword == $password_confirm)
-		{
-			//seed random number generator
-			mt_srand();
-		
-			//create random hashed salt value, and create password hash with salt
-			$salt = sha1(mt_rand());
-			$pwhash = sha1($salt . $password);
-			
-			//Update pwhash in database
-			$result = pg_prepare($conn, "get_pwhash","SELECT pwhash FROM database.users WHERE username = $1");
-			$result = pg_execute($conn, "get_pwhash", array( $current_username));
-			$row = pg_fetch_assoc($result);
-			$pwhash = $row['pwhash'];
-			
-			//Update salt in database
-			$result = pg_prepare($conn, "get_salt","SELECT salt FROM database.users WHERE username = $1");
-			$result = pg_execute($conn, "get_salt", array( $current_username));
-			$row = pg_fetch_assoc($result);
-			$salt = $row['salt'];
-			
-			if($result != NULL)
-			{
-				echo "You have successfully changed your password";
-			}
-			else
-			{
-				echo "Error: Password was not successfully changed.";
-				echo "pg_prepare failed: ".pg_last_error($conn);; 
-			}
-			
-		}
-	}
-	
-	if($newemail || $newemail_confirm == " ")
-	{	
-		continue;
-	}
-	
-	//check if e-mail match
-	if($newemail != $newemail_confirm)
-	{
-		echo "Error: Emails do not match, please try again\n<br >\n";
-		echo "Click <a href 'eUserInfophp'>here to return to user info page</a>\n";
-	}
-		
-	//If email match, update changed email in database
-	if($newemail == $newemail_confirm)
-	{		
-			$result = pg_prepare($conn, "email","SELECT email FROM database.users WHERE username = $1");
-			$result = pg_execute($conn, "email", array( $current_username));
-			$row = pg_fetch_assoc($result);
-			$newemail = $row['email'];
-			
-			echo $newemail;
-			
-		if($result != NULL)
-		{
-			echo "You have successfully changed your email";
-			echo "Click <a href 'homepageadmin.php'>here</a>\n";
-		}
-		else
-		{
-			echo "Error: Email was not successfully changed.";
-			echo "pg_prepare failed: ".pg_last_error($conn);
-		}
-			
-	
-	}
-	
-
-	session_write_close();
-	
-}
-?>
+Change first name, middle name and last name -->
 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="style.css" />
-<title> User Info </title>
+<title> Experimenter User Info </title>
 </head>
 <body>
 
@@ -159,27 +23,198 @@ if (isset($_POST['submit']))
 	<div id = 'form' class = 'clearfix'>
 	<form method= 'POST' action='eUserInfo.php'>
 	<br></br>
+	
+	<?php
+
+
+if (isset($_POST['submit']))
+{
+	//Connect to Database
+	include 'connect.php';
+	
+	
+	//Get input values
+	$newpassword = htmlspecialchars($_POST['newpassword']);
+	$password_confirm = htmlspecialchars($_POST['password_confirm']);
+	$email = htmlspecialchars($_POST['email']);
+	$newemail = htmlspecialchars($_POST['newemail']);
+	$newemail_confirm = htmlspecialchars($_POST['newemail_confirm']);
+	$first_name = htmlspecialchars($_POST['first_name']);
+	$middle_name = htmlspecialchars($_POST['middle_name']);
+	$last_name = htmlspecialchars($_POST['last_name']);
+	
+	//Get current username
+	$current_username = trim($_SESSION['username']);
+		
+	if(!empty($first_name))
+	{
+
+			$query = "UPDATE database.experimenters SET (first_name) = ($1) WHERE username = $2";
+			
+			$result = pg_prepare($conn, "update_first_name", $query);
+			echo pg_last_error();
+			$result = pg_execute($conn, "update_first_name", array($first_name, $current_username));
+			
+			if($result)
+			{
+				echo "You have successfully changed your first name";
+			}
+			else
+			{
+				echo "Error: Your first name was not successfully changed.";
+				echo "First name failed to update".pg_last_error($conn);; 
+			}
+	}
+	
+	if(!empty($middle_name))
+	{
+
+			$query = "UPDATE database.experimenters SET (middle_name) = ($1) WHERE username = $2";
+			
+			$result = pg_prepare($conn, "update_middle_name", $query);
+			echo pg_last_error();
+			$result = pg_execute($conn, "update_middle_name", array($middle_name, $current_username));
+			
+			if($result)
+			{
+				echo "You have successfully changed your middle name";
+			}
+			else
+			{
+				echo "Error: Your middle name was not successfully changed.";
+				echo "Middle name failed to update".pg_last_error($conn);; 
+			}
+	}
+	
+	if(!empty($last_name))
+	{
+
+			$query = "UPDATE database.experimenters SET (last_name) = ($1) WHERE username = $2";
+			
+			$result = pg_prepare($conn, "update_last_name", $query);
+			echo pg_last_error();
+			$result = pg_execute($conn, "update_last_name", array($last_name, $current_username));
+			
+			if($result)
+			{
+				echo "You have successfully changed your last name";
+			}
+			else
+			{
+				echo "Error: Your last name was not successfully changed.";
+				echo "Last name to failed to update".pg_last_error($conn);; 
+			}
+	}
+	
+	if(!empty($newpassword) && !empty($password_confirm))
+	{
+		//check if passwords match
+		if($newpassword != $password_confirm)
+		{
+			echo "Error: Passwords do not match, please try again\n<br >\n";
+		}
+		
+		//If password match, update changed password in database
+		if($newpassword == $password_confirm)
+		{
+			//seed random number generator
+			mt_srand();
+		
+			//create random hashed salt value, and create password hash with salt
+			$salt = sha1(mt_rand());
+			$pwhash = sha1($salt . $newpassword);
+			
+			//echo all values for debug
+			echo "$salt\n";
+			echo "$pwhash\n";
+			echo "$newpassword\n";
+			echo "$password_confirm\n";
+			var_dump($current_username);
+			
+			//define the query to update the password and salt
+				$query = "UPDATE database.users SET (pwhash, salt) = ($1, $2) WHERE username = $3";
+
+				//prepare the query
+				$result = pg_prepare($conn, "update_password_salt", $query);
+				echo pg_last_error();
+				//execute the query with user's values
+				$result = pg_execute($conn, "update_password_salt", array($pwhash, $salt, $current_username));
+			
+			
+			if($result)
+			{
+				echo "You have successfully changed your password";
+			}
+			else
+			{
+				echo "Error: Password was not successfully changed.";
+				echo "Failed to update password".pg_last_error($conn);; 
+			}
+			
+		}
+	}
+
+		
+	//If email match, update changed email in database
+	if(!empty($newemail) && !empty($newemail_confirm))
+	{		
+	
+		//check if e-mail match
+		if($newemail != $newemail_confirm)
+		{
+			echo "Error: Emails do not match, please try again\n<br >\n";
+		}
+		else
+		{
+			//define the query to update the password and salt
+			$query = "UPDATE database.users SET (email) = ($1) WHERE username = $2";
+			//prepare the query
+			$stmt = pg_prepare($conn, "update_email", $query);
+			echo pg_last_error();
+			//execute the query with user's values
+			$result = pg_execute($conn, "update_email", array($newemail, $current_username));
+		
+				if($result)
+				{
+					echo "You have successfully changed your email";
+				}
+				else
+				{
+					echo "Error: Email was not successfully changed.";
+					echo "pg_prepare failed: ".pg_last_error($conn);
+				}
+					
+		}
+	}
+	
+
+	session_write_close();
+	
+}
+?>
+
+</br>
 Please enter contact information to change:
 	</br>
-Username:
-<?php echo $current_username; ?>
+	<label for = 'first_name'> First Name: </label>
+	<input type ='text' name='first_name' ></input>
 	</br>
-Current Email:
-<?php echo $newemail ?>
+	<label for = 'middle_name'> Middle Name: </label>
+	<input type ='text' name='middle_name' ></input>
 	</br>
-Change Username:
-	<input type ='text' name='username' ></input>
+	<label for = 'last_name'> Last Name: </label>
+	<input type ='text' name='last_name' ></input>
 	</br>
-Password:
+	<label for = 'newpassword'> Change Password: </label>
 	<input type ='text' name='newpassword' ></input>
 	</br>
-ConfirmPassword:
+	<label for = 'password_confirm'> Confirm Password: </label>
 	<input type ='text' name='password_confirm' ></input>
 	</br>
-Change Email:
+	<label for = 'newemail'> Change Email: </label>
 	<input type ='text' name='newemail' ></input>
 	</br> 
-Confirm Email:
+	<label for = 'newemail_confirm'> Confirm Email</label>
 	<input type ='text' name='newemail_confirm' ></input>
 	</br> 
 	</br>
