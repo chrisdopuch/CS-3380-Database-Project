@@ -73,7 +73,7 @@ function top($user_type){
 		}
 		else{
 			echo "<a class=\"headerLinks\" href=\"pHome.php\">Home</a>\n";
-			echo "<a class=\"headerLinks\" href=\"signup.php\">Sign Up</a>\n";
+			echo "<a class=\"headerLinks\" href=\"pEnroll.php\">Sign Up</a>\n";
 			echo "<a class=\"headerLinks\" href=\"pSessions.php\">My Sessions</a>\n";
 			echo "<a class=\"headerLinks\" href=\"pUserInfo.php\">My Account</a>\n";
 		}
