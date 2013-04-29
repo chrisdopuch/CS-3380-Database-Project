@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS database.experimenters;
 DROP TABLE IF EXISTS database.locations;
 DROP TABLE IF EXISTS database.participants;
 DROP TABLE IF EXISTS database.users;
+DROP TABLE IF EXISTS database.emails;
 DROP SCHEMA IF EXISTS database;
 
 CREATE SCHEMA database;
@@ -66,6 +67,14 @@ expid			INTEGER REFERENCES database.experiments(expid) ON DELETE CASCADE,
 pid				INTEGER REFERENCES database.participants(pid)
 );
 
+CREATE TABLE emails (
+id				SERIAL PRIMARY KEY,
+send_by			TIMESTAMP,
+recipient		VARCHAR(50),
+subject			VARCHAR(50),
+text			VARCHAR(500)
+);
+
 /*
 Insert test data into database for use by developers
 Users are easy enough to be added through registration, and edited on my account page
@@ -82,6 +91,7 @@ INSERT INTO participants (first_name, middle_name, last_name, address, phone_num
 INSERT INTO experimenters (first_name, middle_name, last_name, username) VALUES('fname', 'mname', 'lname', 'test_user2');
 INSERT INTO sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES(CURRENT_DATE, CURRENT_TIME, CURRENT_TIME, 1, 1 , 1, 1);
 INSERT INTO sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES(CURRENT_DATE, CURRENT_TIME, CURRENT_TIME, 2, 1, 2, 1);
+INSERT INTO emails (send_by, recipient, subject, text) VALUES(CURRENT_TIMESTAMP, 'cdp73@mail.missouri.edu', 'test email', 'This is a test email sent from babbage');
 
 
 
