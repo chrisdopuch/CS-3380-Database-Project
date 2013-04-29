@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title> Experiments </title>
-<link rel="stylesheet" type="text/css" href="style.css" />
-<style type = "text/css">
-
-</style>
-</head>
-<body>
 <?php
 //include header
 include 'header.php';
@@ -36,7 +26,7 @@ top("participant");
 				
 				$end_time = $row['end_time'];
 				
-				$l_id =$row['lid'];
+	
 				
 				
 						
