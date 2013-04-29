@@ -80,18 +80,6 @@ top("experimenter");
 			//this action displays a form to create a new experiment
 			case "add":
 				//Display add form
-				echo "\t<form method='POST' action='eExperiments.php?action=add_commit'\n";
-				echo "\t\t<input type='hidden' name='action' value='add_commit' />\n";
-				echo "\t\t<p>Enter data for the experiment to be added: </p><br />\n";
-				echo "\t\t<table border='1'>\n";
-				echo "\t\t\t<tr><td>Name</td><td><input type='text' name='name' /></td></tr>\n";
-				echo "\t\t\t<tr><td>Payment</td><td><input type='text' name='payment' /></td></tr>\n";
-				echo "\t\t\t<tr><td>Requirements</td><td><input type='text' name='requirements' /></td></tr>\n";
-				echo "\t\t</table>\n";
-				echo "\t\t<input type='submit' value='Save' />\n";
-				echo "\t\t<input type='button' value='Cancel' onclick=\"top.location.href='eExperiments.php';\" />\n";
-				echo "\t</form>\n";
-
 				echo "\t<form method='POST' action='eExperiments.php?action=add_commit'>\n";
 				echo "\t\t<input type='hidden' name='action' value='add_commit' />\n";
 				echo "\t\t<p>Enter data for the experiment to be added: </p><br />\n";
@@ -109,8 +97,8 @@ top("experimenter");
 				echo "\t\t\t\t\t\t</select>\n";
 				echo "\t\t\t\t\t</td>\n";
 				echo "\t\t\t\t\t<td>\n";
-				echo "\t\t\t\t\t\tselect name='ethnicity_sel'>";
-				echo "\t\t\t\t\t\t\t<option value='x' > don't care </option>";
+				echo "\t\t\t\t\t\t<select name='ethnicity_sel'>";
+				echo "\t\t\t\t\t\t\t<option value='x' selected='selected'> don't care </option>";
 				echo "\t\t\t\t\t\t\t<option value='s1'> s1 </option>";
 				echo "\t\t\t\t\t\t\t<option value='s2'> s2 </option>";
 				echo "\t\t\t\t\t\t\t<option value='s3'> s3 </option>";
@@ -125,7 +113,7 @@ top("experimenter");
 				echo "\t\t\t\t\t</td>\n";
 				echo "\t\t\t\t\t<td>\n";
 				echo "\t\t\t\t\t\t<select name='gender_sel'>\n";
-				echo "\t\t\t\t\t\t\t<option value='x' > don't care </option>\n";
+				echo "\t\t\t\t\t\t\t<option value='x' selected='selected'> don't care </option>\n";
 				echo "\t\t\t\t\t\t\t<option value='m'> male </option> \n";
 				echo "\t\t\t\t\t\t\t<option value='f'> female </option> \t";
 				echo "\t\t\t\t\t\t</select>\n";
@@ -136,7 +124,7 @@ top("experimenter");
 				echo "\t\t\t\t\t<td>Age</td>\n";
 				echo "\t\t\t\t\t<td>\n";
 				echo "\t\t\t\t\t\t<select name='age_op'>\n";
-				echo "\t\t\t\t\t\t\t<option value='x' > don't care </option>\n";
+				echo "\t\t\t\t\t\t\t<option value='x' selected='selected'> don't care </option>\n";
 				echo "\t\t\t\t\t\t\t<option value='=='> equal to </option> \n";
 				echo "\t\t\t\t\t\t\t<option value='>='> greater than or equal to </option> \n";
 				echo "\t\t\t\t\t\t\t<option value='<='> less than or equal to </option>\n";
@@ -151,7 +139,7 @@ top("experimenter");
 				echo "\t\t\t\t\t<td>Education</td>\n";
 				echo "\t\t\t\t\t<td>\n";
 				echo "\t\t\t\t\t\t<select name='education_op'>\n";
-				echo "\t\t\t\t\t\t\toption value='x' > don't care </option>\n";
+				echo "\t\t\t\t\t\t\t<option value='x' selected='selected'> don't care </option>\n";
 				echo "\t\t\t\t\t\t\t<option value='=='> equal to </option> \n";
 				echo "\t\t\t\t\t\t\t<option value='>='> greater than or equal to </option> \n";
 				echo "\t\t\t\t\t\t\t<option value='<='> less than or equal to </option>\n";
@@ -170,7 +158,40 @@ top("experimenter");
 
 			//this action adds a new experiment to the database based on the data entered by the user
 			case "add_commit":
+				//get post vars
+				$name = $_POST['name'];
+				$payment = $_POST['payment'];
+				$requirements = array(
+									"ethnicity" => array(
+										"op" => $_POST['ethnicity_op'],
+										"sel" => $_POST['ethnicity_sel']),
+									"gender" => $_POST['gender_sel'],
+									"age" => array(
+										"op" => $_POST['gender_op'],
+										"sel" => $_POST['gender_sel']),
+									"education" => array(
+										"op" => $_POST['education_op'],
+										"sel" => $_POST['education_sel']));
+				//example usage: $requirements["age"]["sel"] == $_POST['age_sel'] (i.e. 21 or whatever age was initially entered)
 
+				//encode as JSON string for storage
+				$requirements = json_encode($requirements);
+
+				$query = "INSERT INTO database.experiments (name, payment, requirements) VALUES ($1, $2, $3)";
+				//prepare the query
+				$stmt = pg_prepare($conn, "add_exp", $query);
+				//execute query 
+				$result = pg_execute($conn, "add_exp", array($name, $payment, $requirements));
+
+				//Check to see if the query was successful
+				if ($result){
+					echo "\Insert was successful. <br />\n";
+					echo "\tReturn to <a href='eExperiments.php'>experiments page</a>.";
+				}
+				else{
+					echo "\tINSERT FAILED: ".pg_last_error($conn)."<br />\n";
+					echo "\tReturn to <a href='eExperiments.php'>experiments page</a>.";
+				}
 
 				break;
 
@@ -186,6 +207,9 @@ top("experimenter");
 				if (!$result){
 					die("Unable to execute query: " . pg_last_error($conn));
 				}
+				//print an add link
+				echo "Insert a new Experiment by clicking this <a href='eExperiments.php?action=add'>link</a>.<br />\n";
+
 
 				//Print the results of the query in a nice table
 				pgResultToTableWithButtons($result, "experiments");
