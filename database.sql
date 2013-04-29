@@ -39,7 +39,7 @@ CREATE TABLE experiments (
 expid			SERIAL PRIMARY KEY,
 payment			NUMERIC,
 name			CHAR(50),
-requirements	VARCHAR(500)
+requirements	JSON
 );
 
 CREATE TABLE experimenters (
