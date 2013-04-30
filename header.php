@@ -1,11 +1,12 @@
-<!-- 	
+<?php
+/* 	
 This file should be included on every page except index.php and registration.php
 It does three things:
 1. Checks if user is logged in and if not, redirect to index.php
 2. Finds what type of user they are, and if they don't belong on that page, redirect them to the appropriate Home.php file
 3. Display the header based on what kind of user
- -->
-<?php
+ */
+session_start();
 /*
 This is the function you should call immediately after including the file
 Input: the type of user intended to use the page, should be either "experimenter" or "participant" 
@@ -17,9 +18,6 @@ function top($user_type){
 		When set to TRUE, debug tools will appear on the experimenter header.
 	*/
 	$debug = true;
-	
-	//start the session
-	session_start();
 	
 	//validate argument input
 	if($user_type != "experimenter" && $user_type != "participant"){

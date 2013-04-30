@@ -1,3 +1,9 @@
+<?php
+//include header
+include 'header.php';
+include 'connect.php';
+top("participant");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,13 +11,13 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
+<script>
+function clickAction(form, sid){
+  document.forms[form].elements['button'].value = ;
+  document.getElementById(form).submit();
+}
+</script>
 <?php
-//include header
-include 'header.php';
-include 'connect.php';
-
-top("participant");
-
 	ERROR_REPORTING(E_ALL);
 	ini_set("display_errors", 1);
 
@@ -26,12 +32,13 @@ top("participant");
 	$result1 = pg_prepare($conn, "get_sessions", $query1);
 	$result1 = pg_execute($conn, "get_sessions", array($username));
 	$i =0;
-	//populates the table with the tours.
-	if(!$result1){
+	//populates the table with the sessions.
+	if(pg_num_rows($result1) != 0){
 		echo "You aren't currently signed up for any sessions<br/>\n";
 	}
 	else{
 		echo "<h1>Your Sessions</h1><br />\n";
+		echo "<form id='unenroll_form' action='pSessions.php?action=unenroll' method='POST'>\n";
 		echo "<table border='1'>\n";
 	}
 	while ($row = pg_fetch_assoc($result1))
@@ -76,37 +83,24 @@ top("participant");
 
                 echo "<td> $end_time </td>";
 						
-				echo "<td> <button onclick='unenroll_session($sid, $i)'> Delete </button></td>";
+				echo "<td> <button name='sid' onclick='clickAction(\"unenroll_form\")' value=$sid> Cancel
+				</button></td>";
+				echo "<input type='hidden' name='sid' value='$sid' />";
 				
 				echo "</tr>";
 				$i++;
 	}
+	echo "</form>";
+	if(isset($_GET['action'])){
+		$sid = $_POST['sid'];
+		$result = pg_prepare($conn, "unenroll", "UPDATE database.sessions SET pid = NULL WHERE sid = $1");
+		$result = pg_execute($conn, "unenroll", array($sid));
+		if($result){
+			echo "<script> alert('You have been successfully removed from the session');</script>";
+		}
+	}
+	
 ?>
 </body>
-<script>
-
-
-function deleteexp(exp_id, row)
-{
-
-var hiderow = "row" + row;
-
-$("#" + hiderow).hide();
-
-
-$.post("deletesession.php", 
-
-{
-
-exp_id : exp_id
-
-}
-);
-
-
-}
-
-
-</script>
 </html>
 		
