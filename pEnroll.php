@@ -155,26 +155,26 @@ if(isset($_POST['submit'])){
 
 		case 'time':
 			$option = $_POST['options'];
-			if($option = "mor"){
+			if($option == "mor"){
 				$query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '12:00:00') ORDER BY sessions.session_date asc";
 				$result = pg_prepare($conn, "morning_sessions", $query);
 				$result = pg_execute($conn, "morning_sessions", array());
-			} else if($option = "aft"){
+			} else if($option == "aft"){
 				$query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '17:00:00') ORDER BY sessions.session_date asc";
 				$result = pg_prepare($conn, "afternoon_sessions", $query);
-				$result = pg_execute($conn, "afternoon_sessions", array($username));
-			} else if($option = "eve"){
+				$result = pg_execute($conn, "afternoon_sessions", array());
+			} else if($option == "eve"){
                                 $query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '24:00:00') ORDER BY sessions.session_date asc";
                                 $result = pg_prepare($conn, "afternoon_sessions", $query);
-                                $result = pg_execute($conn, "afternoon_sessions", array($username));
+                                $result = pg_execute($conn, "afternoon_sessions", array());
                         }
 			break;
 
 		case 'experiment':
 
-				$experiment = $_POST['experiment'];
+				$experiment = trim($_POST['experiment']);
 				echo $experiment;
-				$query ="SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(experiments.name = '$experiment') ORDER BY sessions.session_date asc";
+				$query ="SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(experiments.name = $1) ORDER BY sessions.session_date asc";
 				$result = pg_prepare($conn, "by_experiments", $query);
 				$result = pg_execute($conn, "by_experiments", array($experiment));
 			

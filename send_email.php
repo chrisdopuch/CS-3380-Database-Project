@@ -13,9 +13,9 @@ $result = pg_execute($conn, "emails", array());
 while($row = pg_fetch_assoc($result)){
 	//get variables
 	$id = $row['id'];
-	$recipient = $row['recipient'];
-	$subject = $row['subject'];
-	$text = $row['text'];
+	$recipient = trim($row['recipient']);
+	$subject = trim($row['subject']);
+	$text = trim($row['text']);
 	
 	//send email
 	mail($recipient,$subject,$text);

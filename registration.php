@@ -104,9 +104,9 @@ if (isset($_POST['submit'])){
 		echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
 		return;}
 	$middle = htmlspecialchars($_POST['middle']);
-	if($middle == ""){echo "Error: You must enter a middle name\n<br>\n";
+	/*if($middle == ""){echo "Error: You must enter a middle name\n<br>\n";
 		echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
-		return;}
+		return;}*/
 	$last = htmlspecialchars($_POST['last']);
 	if($last == ""){echo "Error: You must enter a last name\n<br>\n";
 		echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
