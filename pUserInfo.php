@@ -1,8 +1,7 @@
-<!--This user info page is for the participants to be able to update/change their contact information, including their username,
-address, phone number, age, education, password, and email address. It checks if there was a new username entered and if so it is udapted and stored in the database.
-The password and email both have confirmations to be sure the user entered the correct information. The code checks that the new 
-password and email match the confirmed password and email, respectively. If the new field for the password or email match the 
-confirming fields then it is updated in the database. Since the user is an participant they are redirected back to the participant home page.-->
+<!--This user info page is for the participants to be able to update/change their contact information, including their first, middle, and last name,
+address, phone number, age, education, password, ethnicity and email address.It confirms that the password and email address match the error checking
+fields before updating in the databse. If there is an error, a message displays telling the user that the two fields are not identitical and to reenter the information.
+The user is given a drow-down box to select from the given ethnicities to update from -->
 
 <html>
 <head>
@@ -23,8 +22,6 @@ confirming fields then it is updated in the database. Since the user is an parti
 	
 	<?php
 
-if (isset($_POST['submit']))
-{
 	
 	//Connect to Database
 	include 'connect.php';
@@ -46,6 +43,38 @@ if (isset($_POST['submit']))
 	
 	//Get current username
 	$current_username = $_SESSION['username'];
+
+	$query = pg_prepare($conn, "display_info", "SELECT first_name, middle_name, last_name, address, phone_number, ethnicity, age, education FROM database.participants WHERE username = $1");
+	$result = pg_execute($conn, "display_info", array($current_username));
+	$row = pg_fetch_assoc($result);
+	$f_name = $row['first_name'];
+	$m_name = $row['middle_name'];
+	$l_name  = $row['last_name'];
+	$current_address = $row['address'];
+	$current_phone = $row['phone'];
+	$current_ethnicity = $row['ethnicity'];
+	$current_age = $row['age'];
+	$current_grade = $row['education'];
+
+	$query = pg_prepare($conn, "display_email", "SELECT email FROM database.users WHERE username = $1");
+	$result = pg_execute($conn, "display_email", array($current_username));
+	$row = pg_fetch_assoc($result);
+	$current_email = $row['email'];
+
+echo "First name: $f_name\n<br>\n";
+echo "Middle name: $m_name\n<br>\n";
+echo "Last name: $l_name\n<br>\n";
+echo "Email: $current_email\n<br>\n";
+echo "Address: $current_address\n<br>\n";
+echo "Phone Number: $current_phone\n<br>\n";
+echo "Ethnicity: $current_ethnicity\n<br>\n";
+echo "Age: $current_age\n</br>\n";
+echo "Grade: $current_grade\n<br>\n";
+
+if (isset($_POST['submit']))
+{
+	
+
 	
 	if(!empty($first_name))
 	{
@@ -279,6 +308,9 @@ if (isset($_POST['submit']))
 				echo "Ethnicity failed to update".pg_last_error($conn); 
 			}
 	}
+	
+
+
 	session_write_close();
 	
 }

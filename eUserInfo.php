@@ -4,18 +4,20 @@ The password and email both have confirmations to be sure the user entered the c
 password and email match the confirmed password and email, respectively. If the new field for the password or email match the 
 confirming fields then it is updated in the database. Since the user is an experimenter they areredirected back to the experimeters home page.
 Add username and email to the page for user to see already
-Seperate ssessions for each thing to change
-
-Change first name, middle name and last name -->
+Seperate ssessions for each thing to change -->
 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <title> Experimenter User Info </title>
+<style>
+
+</style>
 </head>
 <body>
-
+<script src="js/bootstrap.min.js"></script>
+	<div id = 'parent'>
 		<?php
 			include 'header.php';
 			top("experimenter");
@@ -26,12 +28,8 @@ Change first name, middle name and last name -->
 	
 	<?php
 
-
-if (isset($_POST['submit']))
-{
-	//Connect to Database
+//Connect to Database
 	include 'connect.php';
-	
 	
 	//Get input values
 	$newpassword = htmlspecialchars($_POST['newpassword']);
@@ -46,6 +44,28 @@ if (isset($_POST['submit']))
 	//Get current username
 	$current_username = trim($_SESSION['username']);
 		
+	$query = pg_prepare($conn, "display_info", "SELECT first_name, middle_name, last_name FROM database.experimenters WHERE username = $1");
+	$result = pg_execute($conn, "display_info", array($current_username));
+	$row = pg_fetch_assoc($result);
+	$f_name = $row['first_name'];
+	$m_name = $row['middle_name'];
+	$l_name  = $row['last_name'];
+
+	$query = pg_prepare($conn, "display_email", "SELECT email FROM database.users WHERE username = $1");
+	$result = pg_execute($conn, "display_email", array($current_username));
+	$row = pg_fetch_assoc($result);
+	$current_email = $row['email'];
+		
+	echo "First name: $f_name\n<br>\n";
+	echo "Middle name: $m_name\n<br>\n";
+	echo "Last name: $l_name\n<br>\n";
+	echo "Email: $current_email\n<br>\n";
+
+		
+if (isset($_POST['submit']))
+{
+	
+	
 	if(!empty($first_name))
 	{
 
@@ -57,12 +77,12 @@ if (isset($_POST['submit']))
 			
 			if($result)
 			{
-				echo "You have successfully changed your first name";
+				echo "You have successfully changed your first name \n</br>\n";
 			}
 			else
 			{
-				echo "Error: Your first name was not successfully changed.";
-				echo "First name failed to update".pg_last_error($conn);; 
+				echo "Error: Your first name was not successfully changed.\n</br>\n";
+				echo "First name failed to update".pg_last_error($conn); 
 			}
 	}
 	
@@ -77,12 +97,12 @@ if (isset($_POST['submit']))
 			
 			if($result)
 			{
-				echo "You have successfully changed your middle name";
+				echo "You have successfully changed your middle name\n</br>\n";
 			}
 			else
 			{
-				echo "Error: Your middle name was not successfully changed.";
-				echo "Middle name failed to update".pg_last_error($conn);; 
+				echo "Error: Your middle name was not successfully changed.\n</br>\n";
+				echo "Middle name failed to update".pg_last_error($conn);
 			}
 	}
 	
@@ -97,12 +117,12 @@ if (isset($_POST['submit']))
 			
 			if($result)
 			{
-				echo "You have successfully changed your last name";
+				echo "You have successfully changed your last name\n</br>\n";
 			}
 			else
 			{
-				echo "Error: Your last name was not successfully changed.";
-				echo "Last name to failed to update".pg_last_error($conn);; 
+				echo "Error: Your last name was not successfully changed.\n</br>\n";
+				echo "Last name to failed to update".pg_last_error($conn); 
 			}
 	}
 	
@@ -123,12 +143,6 @@ if (isset($_POST['submit']))
 			//create random hashed salt value, and create password hash with salt
 			$salt = sha1(mt_rand());
 			$pwhash = sha1($salt . $newpassword);
-			
-			//echo all values for debug
-			echo "$salt\n";
-			echo "$pwhash\n";
-			echo "$newpassword\n";
-			echo "$password_confirm\n";
 			var_dump($current_username);
 			
 			//define the query to update the password and salt
@@ -143,12 +157,12 @@ if (isset($_POST['submit']))
 			
 			if($result)
 			{
-				echo "You have successfully changed your password";
+				echo "You have successfully changed your password\n</br>\n";
 			}
 			else
 			{
-				echo "Error: Password was not successfully changed.";
-				echo "Failed to update password".pg_last_error($conn);; 
+				echo "Error: Password was not successfully changed.\n</br>\n";
+				echo "Failed to update password".pg_last_error($conn); 
 			}
 			
 		}
@@ -176,21 +190,21 @@ if (isset($_POST['submit']))
 		
 				if($result)
 				{
-					echo "You have successfully changed your email";
+					echo "You have successfully changed your email\n</br>\n";
 				}
 				else
 				{
-					echo "Error: Email was not successfully changed.";
+					echo "Error: Email was not successfully changed.\n</br>\n";
 					echo "pg_prepare failed: ".pg_last_error($conn);
 				}
 					
 		}
-	}
-	
+	} 
 
 	session_write_close();
 	
 }
+
 ?>
 
 </br>
@@ -221,6 +235,7 @@ Please enter contact information to change:
 	<input type='submit' name='submit' value='Submit' > </input>
 	
 	</form>
+	</div>
 	</div>
 </body>
 </html>
