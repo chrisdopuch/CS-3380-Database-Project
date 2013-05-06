@@ -17,7 +17,7 @@ top("experimenter");
 	<h2>Sessions</h2><br />
 
 <?php
-		$action = $_GET['action']; // edit, remove, edit_commit, view_exp, NOTHING
+		$action = $_GET['action']; // edit, remove, edit_commit, view_exp, add_commit, NOTHING
 		$val = $_GET['val']; //sid, expid
 
 		switch ($action){
@@ -102,7 +102,7 @@ top("experimenter");
 					echo "\tReturn to <a href='eSession.php'>search page</a>.";
 				}
 				else {
-					pgResultToTableWithButtons($result, "sessions");
+					pgResultToEditableTableWithButtons($result);
 
 					
 				//make the query to generate the experiment select dropdown
@@ -117,6 +117,36 @@ top("experimenter");
 				}
 				break;
 
+			//user has pressed an add button and we need to add a session	
+			case "add_commit":
+				//get postvars
+				$a_session_date = $_POST['a_session_date'];
+				$a_start_time = $_POST['a_start_time'];
+				$a_end_time = $_POST['a_end_time'];
+				$a_lid = $_POST['a_lid'];
+				$a_eid = $_POST['a_eid'];
+				$a_expid = $_POST['a_expid'];
+				$a_pid = $_POST['a_pid'];
+
+				//build the query
+				$query = "INSERT INTO database.sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES ($1, $2, $3, $4, $5, $6, $7)";
+				//prepare the query
+				$stmt = pg_prepare($conn, "add_s", $query);
+				//execute query 
+				$result = pg_execute($conn, "add_s", array($a_session_date, $a_start_time, $a_end_time, $a_lid, $a_eid, $a_expid, $a_pid));
+
+				//Check to see if the query was successful
+				if ($result){
+					echo "\tInsert was successful. <br />\n";
+					echo "\tReturn to <a href='eSessions.php'>sessions page</a>.";
+				}
+				else{
+					echo "\tINSERT FAILED: ".pg_last_error($conn)."<br />\n";
+					echo "\tReturn to <a href='eSessions.php'>sessions page</a>.";
+				}
+
+
+				break;
 
 			//No action selected; show all experiments
 			default:
@@ -132,7 +162,7 @@ top("experimenter");
 				}
 
 				//Print the results of the query in a nice table
-				pgResultToTableWithButtons($result, "experiments");
+				pgResultToEditableTableWithButtons($result);
 
 				//make the query to generate the experiment select dropdown
 				$query = "SELECT expid, name FROM database.experiments";
@@ -217,9 +247,9 @@ function pgResultToDropDownWithDefault($result, $type, $default){
 }
 
 //Function to retrieve experiments data and display it with buttons for user interaction
-function pgResultToTableWithButtons($result, $entryType){
+function pgResultToEditableTableWithButtons($result){
 		//Print form
-		echo "\t<form method='POST' action='/~cs3380sp13grp11/dataedit_exec.php'>\n";
+		echo "\t<form method='POST' action='/~cs3380sp13grp11/eSessions.php'>\n";
 		//Print headers
 		echo "\t<table border='1'>\n";
 		echo "\t\t<tr>\n";
@@ -235,29 +265,7 @@ function pgResultToTableWithButtons($result, $entryType){
 		//Print the rows
 		while($row = pg_fetch_assoc($result)){
 			//Prepare buttons
-			switch($entryType){
-				case "experimenters":
-					$buttonAction = "type=experimenters&val=".$row['eid'];
-					break;
-				case "experiments":
-					$buttonAction = "type=experiments&val=".$row['expid'];
-					break;
-				case "participants":
-					$buttonAction = "type=participants&val=".$row['pid'];
-					break;
-				case "sessions":
-					$buttonAction = "type=sessions&val=".$row['sid'];
-					break;
-				case "users":
-					$buttonAction = "type=users&val=".$row['username'];
-					break;
-				case "locations":
-					$buttonAction = "type=locations&val=".$row['lid'];
-					break;
-				default:
-					echo "Bad option for $entryType in pgResultToTableWithButtons().\n";
-					exit(1);
-			}
+			$buttonAction = "type=sessions&val=".$row['sid'];
 
 			echo "\t\t<tr>\n";
 			//Print the buttons
@@ -271,6 +279,25 @@ function pgResultToTableWithButtons($result, $entryType){
 			}
 			echo "\t\t</tr>\n";
 		}
+		//print the "add new" button and form
+		echo "\t\t<tr>\n";
+		echo "\t\t\t<td>\n";
+		echo "\t\t\t\t<input type='submit' value='Add New' formaction='eSessions.php?action=add_commit' />\n";
+		echo "\t\t\t</td>\n";
+		//print editable fields
+		for ($i = 0; $i < pg_num_fields($result); $i++){
+			$fieldname = pg_field_name($result, $i);
+			//user can't edit sid
+			if ($fieldname == 'sid'){
+				echo "\t\t\t<td><input type='text' name='a_sid' disabled='disabled'  /></td>\n";
+
+			}
+			else {
+				echo "\t\t\t<td><input type='text' name='a_".$fieldname."'  /></td>\n";
+			}
+		}
+
+		echo "\t\t</tr>\n";
 
 		echo "\t</table>\n";
 		echo "\t</form>";
