@@ -264,6 +264,127 @@ FUNCTION enroll_button($row)
                 </form></td>";
 
 }
+/*
+ * IN: the exact expid for an experiment and username for a user
+ * OUT: boolean true or false
+ * FUNCTION: compares a user's demographic information with an experiment's requirements and returns true if they
+ *				are eligable and false if they are not
+ * PROCESS INTUITION: experiments store their requirements as a JSON object. This function queries for this object and
+ 				for all of the user's information required to do the checks. It then deserializes the experiment's JSON
+ 				string and starts doing comparisons until one fails or they all succeed.
+ *
+ */
+function validate_user_against_requirements($expid, $username){
+	//build queries
+	$query1 = "SELECT requirements FROM database.experiments WHERE expid = $1";
+	$query2 = "SELECT ethnicity, gender, age, education FROM database.users WHERE username = $1";
+	//prepare the query
+	$stmt1 = pg_prepare($conn, "exp_query", $query1);
+	$stmt2 = pg_prepare($conn, "user_query", $query2);
+	//execute the query 
+	$result1 = pg_execute($conn, "exp_query", array($expid));
+	$result2 = pg_execute($conn, "user_query", array($username));
+	
+	//Die if either query fails
+	if (!$result1){
+		die("Unable to execute query1: " . pg_last_error($conn));
+	}
+	if (!$result2){
+		die("Unable to execute query2: " . pg_last_error($conn));
+	}
+
+	//returns an assoc array formed from the JSON field returned by the query
+	$requirements = json_decode(pg_fetch_result($result1, 0, "requirements"));
+	$credentials = pg_fetch_assoc($result2);
+
+	//start checking requirements
+	//ethnicity
+	//If ethnicity is not set to "don't care" in the requirements field
+	if ($requirements["ethnicity"]["sel"] != "x"){
+		//switch on the operator; available options: "is" and "is not"
+		switch ($requirements["ethnicity"]["op"]){
+			case "is":
+				//if it "is" NOT the selected option, return false
+				if ($requirements["ethnicity"]["sel"] != $credentials["ethnicity"]){
+					return FALSE;
+				}
+				break;
+			case "is not":
+				//if it "IS" the selected option, return false
+				if ($requirements["ethnicity"]["sel"] == $credentials["ethnicity"]){
+					return FALSE;
+				}
+				break;
+		}
+	}
+	//gender
+	//If gender is not set to "don't care"
+	if ($requirements["gender"]["sel"] != "x"){
+		//no switch because the only operator is "is"
+		//if it IS NOT the required gender, return false
+		if ($requirements["gender"]["sel"] != $credentials["gender"]){
+			return FALSE;
+		}
+
+	}
+
+	//age
+	//If the operator is not set to "don't care"
+	if ($requirements["age"]["op"] != "x"){
+		//switch on the remaining operators
+		switch ($requirements["age"]["op"]){
+			case "==":
+				//if the age requirement is not exactly equal to the credential, return false
+				if ($requirements["age"]["sel"] != $credentials["age"]){
+					return FALSE;
+				}
+
+				break;
+			case ">=":
+				//if is is not the case that the credential is greater than or equal to the requirement, return false
+				if (!($credentials["age"] >= $requirements["age"]["sel"])){
+					return FALSE;
+				}
+
+				break;
+			case "<=":
+				//if is is not the case that the credential is less than or equal to the requirement, return false
+				if (!($credentials["age"] <= $requirements["age"]["sel"])){
+					return FALSE;
+				}
+				break;
+		}
+	}
+
+	//education
+	//If the operator is not set to "don't care"
+	if ($requirements["education"]["op"] != "x"){
+		//switch on the remaining operators
+		switch ($requirements["education"]["op"]){
+			case "==":
+				//if the education requirement is not exactly equal to the credential, return false
+				if ($requirements["education"]["sel"] != $credentials["education"]){
+					return FALSE;
+				}
+				break;
+			case ">=":
+				//if is is not the case that the credential is greater than or equal to the requirement, return false
+				if (!($credentials["education"] >= $requirements["education"]["sel"])){
+					return FALSE;
+				}
+				break;
+			case "<=":
+				//if is is not the case that the credential is less than or equal to the requirement, return false
+				if (!($credentials["education"] <= $requirements["education"]["sel"])){
+					return FALSE;
+				}
+				break;
+		}
+	}
+
+	//otherwise everything checks out
+	return TRUE;
+}
 
 ?>
 <!--include the footer-->
