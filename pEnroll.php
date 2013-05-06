@@ -295,6 +295,13 @@ function validate_user_against_requirements($expid, $username){
 
 	//returns an assoc array formed from the JSON field returned by the query
 	$requirements = json_decode(pg_fetch_result($result1, 0, "requirements"));
+	//check that the decode went alright
+	if ($requirements == NULL){
+		echo "something goofy goin' on with your requirements on that study: ".json_last_error()."\n";
+		echo "if the study's requirements are set to \"none\" it will cause this error; \"none\" is not valid JSON.";
+		return FALSE;
+	}
+	else if ($requirements )
 	$credentials = pg_fetch_assoc($result2);
 
 	//start checking requirements
