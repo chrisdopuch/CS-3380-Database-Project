@@ -80,9 +80,9 @@ Insert test data into database for use by developers
 Users are easy enough to be added through registration, and edited on my account page
 same goes for sessions soon
 */
-INSERT INTO experiments (payment, name, requirements) VALUES(150, 'experiment','none');
-INSERT INTO experiments (payment, name, requirements) VALUES(100, 'experiment 1', 'none');
-INSERT INTO experiments (payment, name, requirements) VALUES(50, 'experiment 2', 'none');
+INSERT INTO experiments (payment, name, requirements) VALUES(150, 'experiment','{"none":"none"}');
+INSERT INTO experiments (payment, name, requirements) VALUES(100, 'experiment 1', '{"none":"none"}');
+INSERT INTO experiments (payment, name, requirements) VALUES(50, 'experiment 2', '{"none":"none"}');
 INSERT INTO locations (room, building) VALUES(101, 'Student Center');
 INSERT INTO locations (room, building) VALUES(102, 'McAlester');
 INSERT INTO users VALUES('test_user1', 'password_hash', 'salt', 'experimenter', 'email@mail.com');
