@@ -81,6 +81,50 @@
 		return true;
 	}
 	
+	/*
+	Function to send an authentication email to participants who register
+	Input: id of participant who registered
+	Output: true on success; email to emails table
+	*/
+	function authentication_email($pid){
+		//connect to the DB if we aren't already
+		require_once 'connect.php';
+		
+		//check to make sure the participant hasn't already authorized
+		$query_name = "check_unauthenticated";
+		$query = "SELECT * FROM database.participants as p INNER JOIN database.users as u ON u.username = p.username WHERE pid = $1";
+		$result = pg_prepare($conn, $query_name, $query);
+		$result = pg_execute($conn, $query_name, array($pid));
+		$row = pg_fetch_assoc($result);
+		if($row['authenticated'] == TRUE){
+			$message = "Error: this participant is already authenticated!";
+			echo "<script> alert('$message'); </script>\n";
+			return false;
+		}
+		
+		//fetch the reuslts
+		$email = $row['email'];
+		$first_name = $row['first_name'];
+		$last_name = $row['last_name'];
+		
+		//create the authentication email
+		$a_subject = "Confirm your account";
+		$a_body = "Dear $first_name $last_name,\n \t This is an automated email message to confirm your account. Please go to <a href='http://babbage.cs.missouri.edu/~cs3380sp13grp11/authenticate.php?id=$pid'>this link</a> to authenticate your account. \n\nPlease don't respond to this email, as this mailbox is unmonitored.\n";
+		
+		//insert the confirmation email into the emails table
+		$query_name = "insert_authenticate";
+		$query = "INSERT INTO database.emails (send_by, recipient, subject, text) VALUES (CURRENT_TIMESTAMP, $1, $2, $3)";
+		$result = pg_prepare($conn, $query_name, $query);
+		$result = pg_execute($conn, $query_name, array($email, $c_subject, $c_body));
+		if(!$result){
+			$message = "Error: could not add authentication email to emails table!";
+			echo "<script> alert('$message'); </script>\n";
+			return false;
+		}
+		
+		return true;
+	}
+	
 	//helper function
 	function parse_timestamp($timestamp, $format = 'd-m-Y')
 	{

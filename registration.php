@@ -63,6 +63,9 @@ $(document).ready(function() {
 		}
 	});
 });
+function redirect(){
+	window.location = "http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php";
+}
 </script>
 <?php
 //set error reporting
@@ -191,10 +194,6 @@ if (isset($_POST['submit'])){
 		echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
 		return;
 	}
-		
-	//log the username and type in session
-	$_SESSION['username'] = $user;
-	$_SESSION['user_type'] = $user_type;
 	
 	//enter user into either participant or experimenter table
 	if($user_type == "experimenter"){
@@ -206,9 +205,12 @@ if (isset($_POST['submit'])){
 			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
 			return;
 		}
+		//log the username and type in session
+		$_SESSION['username'] = $user;
+		$_SESSION['user_type'] = $user_type;
 	}
 	else if ($user_type == "participant"){
-		$result = pg_prepare($conn, "participant", "INSERT INTO database.participants (first_name, middle_name, last_name, address, phone_number, ethnicity, gender, age, education, contact_again, username) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)");
+		$result = pg_prepare($conn, "participant", "INSERT INTO database.participants (first_name, middle_name, last_name, address, phone_number, ethnicity, gender, age, education, authenticated, contact_again, username) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, FALSE, $10, $11)");
 		$result = pg_execute($conn, "participant", array($first, $middle, $last, $address, $phone, $ethnicity, $gender, $age, $grade, $contact, $user));
 		//make sure the query was successful
 		if(!$result){
@@ -224,7 +226,7 @@ if (isset($_POST['submit'])){
 	if($user_type == "experimenter"){
 		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/eHome.php");
 	} else {
-		header("Location: https://babbage.cs.missouri.edu/~cs3380sp13grp11/pHome.php");
+		echo "<script> alert('You have successfully registered. Please check your mailbox for an authentication email. Once your account is confirmed, you will be able to log in.'); redirect(); </script>";
 	}
 }
 ?>

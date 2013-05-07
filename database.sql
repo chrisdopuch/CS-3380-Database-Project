@@ -32,6 +32,7 @@ gender			CHAR(7),
 age				NUMERIC,
 education 		NUMERIC,
 contact_again	BOOLEAN,
+authenticated	BOOLEAN NOT NULL,
 username		VARCHAR REFERENCES database.users(username) ON DELETE CASCADE
 );
 
