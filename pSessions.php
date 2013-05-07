@@ -5,14 +5,7 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-<script>
-function clickAction(form, sid){
-  document.forms[form].elements['pk'].value = pk;
-  document.forms[form].elements['action'].value = action;
-  document.forms[form].elements['tbl'].value = tbl;
-  document.getElementById(form).submit();
-}
-</script>
+
 <?php
 //include header
 include 'header.php';
@@ -20,109 +13,109 @@ include 'connect.php';
 
 top("participant");
 
-	ERROR_REPORTING(E_ALL);
-	ini_set("display_errors", 1);
+ERROR_REPORTING(E_ALL);
+ini_set("display_errors", 1);
 
-	//get experiment info
-	$username = $_SESSION['username'];
-	
-	//to test the page, uncomment below line
-	$username = 'test_user1';
-	
-	$query1 = "SELECT expid, eid, session_date, start_time, end_time,(SELECT name FROM database.experiments as i WHERE i.expid = o.expid) as experiment_name, (SELECT building FROM database.locations as i WHERE i.lid = o.lid) as building, (SELECT room FROM database.locations as i WHERE i.lid = o.lid) as room, (SELECT first_name FROM database.experimenters as i WHERE i.eid = o.eid) as experimenter_name FROM database.sessions as o WHERE pid = (SELECT pid FROM database.participants WHERE username = $1)";
-	
-	$result1 = pg_prepare($conn, "get_sessions", $query1);
-	$result1 = pg_execute($conn, "get_sessions", array($username));
-	$i =0;
-	//populates the table with the tours.
-	if(!$result1){
-		echo "You aren't currently signed up for any sessions<br/>\n";
-	}
-	else{
-		echo "<h1>Your Sessions</h1><br />\n";
-		echo "<form id='unenroll_form' action='pSessions.php' method='POST'>\n";
-		echo "<table border='1'>\n";
-	}
-	while ($row = pg_fetch_assoc($result1))
-	{
-				$exp_id = $row['expid'];
-                        
-				$e_id = $row['eid'];
-				
-				$start_date = $row['session_date'];
-				
-				$start_time = $row['start_time'];
-				
-				$end_time = $row['end_time'];
-						
-				$experimenter_name = $row['experimenter_name'];
-				
-				$experiment_name = $row['experiment_name'];
-				
-				$building = $row['building'];
-				
-				$room = $row['room'];
-				
-				$sid = $room['sid'];
-				
-				echo "<tr id='row$i'>";
-				
-				echo "<td> $experiment_name </td>";
-				
-				echo "<td> $experimenter_name </td>";
-				
-				echo "<td> $e_id </td>";
-				
-				echo "<td> $exp_id </td>";
-				
-				echo "<td> $building </td>";
-				
-				echo "<td> $room </td>";
+if (isset($_GET['action'])){
+	$action = $_GET['action']; // remove
+	$val = $_GET['val']; //sid
+}
+else {
+	$action = "default";
+}
 
-                echo "<td> $start_date </td>";
-				
-                echo "<td> $start_time </td>";
+switch ($action){
+	case "remove":
+		//get vars
+		$sid = $val;
+		//query removes the participant link from the specified session
+		$stmt = pg_prepare($conn, "unenroll", "UPDATE database.sessions SET pid = NULL WHERE sid = $1");
+		//execute query
+		$result = pg_execute($conn, "unenroll", array($sid));
+		
+		//if query was successful
+		if ($result){
+			echo "\tSuccessfully unenrolled from session!<br />\n";
+			echo "\tReturn to <a href='pSessions.php'>sessions page</a>.";
+		}
+		else{
+			echo "\tUnenroll FAILED: ".pg_last_error($conn)."<br />\n";
+			echo "\tReturn to <a href='pSessions.php'>sessions page</a>.";
+		}
 
-                echo "<td> $end_time </td>";
-						
-				echo "<td> <button onclick='clickAction('unenroll_form', $sid)'> Delete </button></td>";
-				echo "<input type='hidden' name='sid' value='$sid' />";
-				
-				echo "</tr>";
-				$i++;
+		break;
+
+	default:
+		//get experiment info
+		$username = $_SESSION['username'];
+
+		//to test the page, uncomment below line
+		$username = 'test_user1';
+		
+		//what... is this?
+		$query = "SELECT expid, sid, eid, session_date, start_time, end_time,(".
+						"SELECT name FROM database.experiments as i WHERE i.expid = o.expid) as experiment_name, (".
+							"SELECT building FROM database.locations as i WHERE i.lid = o.lid) as building, (".
+								"SELECT room FROM database.locations as i WHERE i.lid = o.lid) as room, (".
+									"SELECT first_name FROM database.experimenters as i WHERE i.eid = o.eid) as experimenter_name FROM database.sessions as o WHERE pid = (".
+										"SELECT pid FROM database.participants WHERE username = $1)";
+		
+		//prepare query
+		$stmt = pg_prepare($conn, "get_sessions", $query);
+		//execute
+		$result = pg_execute($conn, "get_sessions", array($username));
+		//indexing variable for table printing (why are we indexing the table?)
+		$i = 0;
+
+		//if query failed or user not signed up
+		if(!$result){
+			echo "You aren't currently signed up for any sessions.<br/>\n";
+			exit(1);
+		}
+
+		//otherwise print the table
+		pgResultToTableWithButtons($result);
+		break;
+}
+
+
+//Function to retrieve sessions data and display it with buttons for user interaction
+function pgResultToTableWithButtons($result){
+	//Print form
+	echo "\t<form method='POST' action='/~cs3380sp13grp11/pSessions.php'>\n";
+	//Print headers
+	echo "\t<table border='1'>\n";
+	echo "\t\t<tr>\n";
+	//print "Actions" header
+	echo "\t\t\t<th>Actions</th>\n";
+	//print the rest of the headers
+	for ($i = 0; $i < pg_num_fields($result); $i++){
+		$fieldname = pg_field_name($result, $i);
+		echo "\t\t\t<th>$fieldname</th>\n";
 	}
-	if(isset($_POST['submit'])){
-		$sid = $_POST['sid'];
-		$result1 = pg_prepare($conn, "unenroll", "UPDATE database.sessions SET pid = '' WHERE sid = $1");
-		$result1 = pg_execute($conn, "unenroll", array($sid));
-		echo "<script> alert('You have successfully unenrolled from the session');</script>";
+	echo "\t\t</tr>\n";
+
+	//Print the rows
+	while($row = pg_fetch_assoc($result)){
+		echo "\t\t<tr>\n";
+		//Print the buttons
+		echo "\t\t\t<td>\n";
+		echo "\t\t\t\t<input type='submit' value='Unenroll' formaction='pSessions.php?action=remove&val=".$row['sid']."' />\n";
+		echo "\t\t\t</td>\n";
+
+		//Print row contents
+		foreach($row as $entry){
+			echo "\t\t\t<td>$entry</td>\n";
+		}
+
+		echo "\t\t</tr>\n";
 	}
+
+	echo "\t</table>\n";
+	echo "\t</form>";
+}
+
 ?>
 </body>
-<script>
-
-
-function deleteexp(exp_id, row)
-{
-
-var hiderow = "row" + row;
-
-$("#" + hiderow).hide();
-
-
-$.post("deletesession.php", 
-
-{
-
-exp_id : exp_id
-
-}
-);
-
-
-}
-
-
-</script>
 </html>
 		
