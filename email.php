@@ -36,8 +36,8 @@
 		
 		//fetch the reuslts
 		$row = pg_fetch_assoc($result);
-		$first_name = $row['first_name'];
-		$last_name = $row['last_name'];
+		$first_name = trim($row['first_name']);
+		$last_name = trim($row['last_name']);
 		$email = $row['email'];
 		$session_date = $row['session_date'];
 		$start_time = $row['start_time'];
@@ -104,12 +104,12 @@
 		
 		//fetch the reuslts
 		$email = $row['email'];
-		$first_name = $row['first_name'];
-		$last_name = $row['last_name'];
+		$first_name = trim($row['first_name']);
+		$last_name = trim($row['last_name']);
 		
 		//create the authentication email
 		$a_subject = "Confirm your account";
-		$a_body = "Dear $first_name $last_name,\n \t This is an automated email message to confirm your account. Please go to <a href='http://babbage.cs.missouri.edu/~cs3380sp13grp11/authenticate.php?id=$pid'>this link</a> to authenticate your account. \n\nPlease don't respond to this email, as this mailbox is unmonitored.\n";
+		$a_body = "Dear $first_name $last_name,\n \t This is an automated email message to confirm your account. Please go to http://babbage.cs.missouri.edu/~cs3380sp13grp11/authenticate.php?id=$pid to authenticate your account. \n\nPlease don't respond to this email, as this mailbox is unmonitored.\n";
 		
 		//insert the confirmation email into the emails table
 		$query_name = "insert_authenticate";
