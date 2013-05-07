@@ -4,7 +4,11 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 <title>MU Psychological Sciences</title>
 </head>
-
+<script>
+	function redirect(){
+		window.location = "http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php"
+	}
+</script>
 <?php 
 //set error reporting
 ERROR_REPORTING(E_ALL);
@@ -50,12 +54,20 @@ if (isset($_POST['submit'])){
 	}
 
 	//check if the username given matches with the password given
-	$result = pg_prepare($conn, "authenticate", "SELECT salt, pwhash, user_type FROM database.users WHERE $1 = username");
+	$result = pg_prepare($conn, "authenticate", "SELECT salt, pwhash, user_type, (SELECT authenticated FROM database.participants AS i WHERE i.username = o.username) as authenticated FROM database.users AS o WHERE $1 = username");
 	$result = pg_execute($conn, "authenticate", array($user));
 	$row = pg_fetch_assoc($result);
 	$salt = $row['salt'];
 	$pwhash = $row['pwhash'];
-	$user_type = $row['user_type'];
+	$user_type = trim($row['user_type']);
+	if($user_type == "participant"){
+		$auth = $row['authenticated'];
+		if($auth == 'f'){
+			$message = "Error: You must authenticate your account via email before you can log in!";
+			echo "<script> alert('$message'); redirect();</script>\n";
+			return;
+		}
+	}
 	//convert the password entered to a salted hash
 	$local_hash = sha1($salt . $password);
 	//check the local hash against the hashed password in the DB

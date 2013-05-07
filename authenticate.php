@@ -23,7 +23,7 @@
 		$result = pg_prepare($conn, $query_name, $query);
 		$result = pg_execute($conn, $query_name, array($pid));
 		$row = pg_fetch_assoc($result);
-		if($row['authenticated'] == TRUE){
+		if($row['authenticated'] == 't'){
 			header("Location: http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php");
 			exit;
 		}
