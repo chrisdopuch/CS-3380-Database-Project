@@ -28,41 +28,57 @@ top("experimenter");
 ?>
 	<div id = "Options">
 	
-			<div id = "MyStudies">
+				<a href = "eExperiments.php ">Experiments</a>
+					</br>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+					-View sessions of experiments
+					</br>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+					-Edit or remove experiments
+					</br>
+					</br>
 			
-				<a href = " ">My Studies</a>
+				<a href = "eSessions.php ">Sessions</a>
 					</br>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-					-View and edit your studies
+					-Edit or remove sessions
 					</br>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-					-View, add, or change timeslots
-					</br>
-							&nbsp;&nbsp;&nbsp;&nbsp;
-					-Grant or deny participant credit
+					-Add new sessions
 					</br>
 					</br>
 		
-				<div id = "AllStudies">
 					
-					<a href = " ">All Studies</a>
+					<a href = "eLocations.php ">Locations</a>
 					</br>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-						-View all studies available to participants
+						-Room and building of experiments
 					</br>
 					</br>
 				
-				<div id = "AddNewStudy">
-				
-					<a href = " ">Add New Study</a>
+					<a href = "eReports.php ">Reports</a>
 					</br>
-							&nbsp;&nbsp;&nbsp;&nbsp;
-						-Create a new study
+					&nbsp;&nbsp;&nbsp;&nbsp;
+						-Experiments
+					</br>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+						-Sessions
+					</br>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+						-Participants
+					</br>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+						-Contact List
+					</br>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+						-All experimenters
+					</br>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+						-All users
 					</br>
 					</br>
 		
-					<div id = "MyProfile">
-						<a href = " ">My Profile</a>
+						<a href = "eUserInfo.php ">My Account</a>
 						</br>
 								&nbsp;&nbsp;&nbsp;&nbsp;
 							-Change your password

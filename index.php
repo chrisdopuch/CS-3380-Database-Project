@@ -122,9 +122,8 @@ if (isset($_POST['submit'])){
   
     		<h2><u>About </u></h2>
     		<p>&nbsp;</p>
-   			<p>This is where we put the about info..</p>
-    
-    		<h3>&nbsp;</h3>
+    		<h3> Register for different clinical trials offered by the University of Missouri's Psychology Research Department. Browse various experiments and their sessions. 
+			</h3>
 			<h3>&nbsp;</h3>
 			<p>&nbsp;</p>
     	    <h3>&nbsp;</h3>
