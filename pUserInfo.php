@@ -333,7 +333,7 @@ Please enter contact information to change:
 	</br>
 	<label for = 'ethnicity'>Change Ethnicity:  </label>
 			<select name = 'ethnicity'>
-				<option value = "<?php echo $current_ethnicity; ?>" selected>   </option>
+				<option value = "<?php echo "$current_ethnicity"; ?>" selected><?php echo "$current_ethnicity"; ?></option>
 				<option value = "Asian">Asian</option>
 				<option value = "Black/African American">Black/African American</option>
 				<option value = "White/Caucasian">White/Caucasian</option>
