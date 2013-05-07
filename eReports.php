@@ -120,9 +120,12 @@ if(isset($_POST['submit'])){
 <!--process form submisison -->
 <?php
 if(isset($_POST['submit'])){
-	switch($_POST['reportType']){
+	$reportType = $_POST['reportType'];
+	//echo "reportType: $reportType";
+	switch($reportType){
 		case 'experiments':
 			$option = $_POST['options'];
+			echo "options: $options<br/>";
 			if($option = "all"){
 				$query = "SELECT expid, name, payment, requirements FROM database.experiments ORDER BY expid asc";
 				$result = pg_prepare($conn, "all_experiments", $query);
@@ -136,6 +139,7 @@ if(isset($_POST['submit'])){
 			break;
 		case 'sessions':
 			$option = $_POST['options'];
+			echo "options: $options<br/>";
 			if($option = "all"){
 				$query = "SELECT sid, (Select name FROM database.experiment as i WHERE i.expid = o.expid) as experiment_name, start_time, end_time, (Select name FROM database.experimenters as i WHERE i.eid = o.eid) as experimenter_name, (Select name FROM database.participants as i WHERE i.pid = o.pid) as participant_name as experimenter_name (SELECT (building+' '+room) as location FROM database.locations as i WHERE i.lid = o.lid) as location  FROM database.sessions as o ORDER BY experiment_name asc";
 				$result = pg_prepare($conn, "all_sessions", $query);
@@ -149,6 +153,7 @@ if(isset($_POST['submit'])){
 			break;
 		case 'participants':
 			$option = $_POST['options'];
+			echo "options: $options<br/>";
 			if($option = "all"){
 				$query = "SELECT pid, first_name, middle_name last_name, username, address, phone_number,(SELECT email FROM database.users as i WHERE i.username = o.username) as email_address, ethnicity, gender, age, education FROM database.participants as o ORDER BY expid asc";
 				$result = pg_prepare($conn, "all_participants", $query);
