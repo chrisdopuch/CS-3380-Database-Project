@@ -1,7 +1,6 @@
-<!--This user info page is for the participants to be able to update/change their contact information, including their first, middle, and last name,
+<!--This user info page is for the participants to be able to update/change their contact information including their first, middle, and last name,
 address, phone number, age, education, password, ethnicity and email address.It confirms that the password and email address match the error checking
-fields before updating in the databse. If there is an error, a message displays telling the user that the two fields are not identitical and to reenter the information.
-The user is given a drow-down box to select from the given ethnicities to update from -->
+fields before updating in the databse. If there is an error, a message displays telling the user that the two fields are not identitical and to reenter the information. -->
 
 <html>
 <head>
@@ -10,18 +9,16 @@ The user is given a drow-down box to select from the given ethnicities to update
 <title> Participant User Info </title>
 </head>
 <body>
-
-		<?php
-			include 'header.php';
-			top("participant");
-		?>
+	<?php
+		include 'header.php';
+		top("participant");
+	?>
 		
 	<div id = 'form' class = 'clearfix'>
 	<form method= 'POST' action='pUserInfo.php'>
 	<br></br>
 	
-	<?php
-
+<?php
 	
 	//Connect to Database
 	include 'connect.php';
@@ -44,6 +41,7 @@ The user is given a drow-down box to select from the given ethnicities to update
 	//Get current username
 	$current_username = $_SESSION['username'];
 
+	//Get current user contact information from database
 	$query = pg_prepare($conn, "display_info", "SELECT first_name, middle_name, last_name, address, phone_number, ethnicity, age, education FROM database.participants WHERE username = $1");
 	$result = pg_execute($conn, "display_info", array($current_username));
 	$row = pg_fetch_assoc($result);
@@ -61,20 +59,8 @@ The user is given a drow-down box to select from the given ethnicities to update
 	$row = pg_fetch_assoc($result);
 	$current_email = $row['email'];
 
-echo "First name: $f_name\n<br>\n";
-echo "Middle name: $m_name\n<br>\n";
-echo "Last name: $l_name\n<br>\n";
-echo "Email: $current_email\n<br>\n";
-echo "Address: $current_address\n<br>\n";
-echo "Phone Number: $current_phone\n<br>\n";
-echo "Ethnicity: $current_ethnicity\n<br>\n";
-echo "Age: $current_age\n</br>\n";
-echo "Grade: $current_grade\n<br>\n";
-
 if (isset($_POST['submit']))
 {
-	
-
 	
 	if(!empty($first_name))
 	{
@@ -308,7 +294,6 @@ if (isset($_POST['submit']))
 				echo "Ethnicity failed to update".pg_last_error($conn); 
 			}
 	}
-	
 
 
 	session_write_close();
@@ -318,49 +303,51 @@ if (isset($_POST['submit']))
 
 Please enter contact information to change:
 	</br>
+	</br>
 	<label for = 'first_name'> First Name: </label>
-	<input type ='text' name='first_name' ></input>
+	<input type ='text' name='first_name'  placeholder = " <?php echo $f_name; ?>" ></input>
 	</br>
 	<label for = 'middle_name'> Middle Name: </label>
-	<input type ='text' name='middle_name' ></input>
+	<input type ='text' name='middle_name'   placeholder = " <?php echo $m_name; ?>"></input>
 	</br>
 	<label for = 'last_name'> Last Name: </label>
-	<input type ='text' name='last_name' ></input>
+	<input type ='text' name='last_name'  placeholder = " <?php echo $l_name; ?>"></input>
 	</br>
 	<label for = 'newpassword'> Change Password: </label>
-	<input type ='text' name='newpassword' ></input>
+	<input type ='text' name='newpassword'  ></input>
 	</br>
 	<label for = 'password_confirm'> Confirm Password: </label>
 	<input type ='text' name='password_confirm' ></input>
 	</br>
 	<label for = 'newemail'> Change Email: </label>
-	<input type ='text' name='newemail' ></input>
+	<input type ='text' name='newemail'  placeholder = " <?php echo $current_email; ?>"></input>
 	</br> 
 	<label for = 'newemail_confirm'> Confirm Email: </label>
-	<input type ='text' name='newemail_confirm' ></input>
+	<input type ='text' name='newemail_confirm'   placeholder = " <?php echo $current_email; ?>"></input>
 	</br> 
 	<label for = 'address'> Change Address: </label>
-	<input type ='text' name='address' ></input>
+	<input type ='text' name='address' placeholder = " <?php echo $current_address; ?>" ></input>
 	</br> 
 	<label for = 'phone_number'> Change Phone Number: </label>
-	<input type ='text' name='phone' ></input>
+	<input type ='text' name='phone' placeholder = " <?php echo $current_phone; ?>" ></input>
 	</br>
-	<label for = 'ethnicity'>Change Ethnicity: </label>
+	<label for = 'ethnicity'>Change Ethnicity:  </label>
 			<select name = 'ethnicity'>
+				<option value = "<?php echo $current_ethnicity; ?>" selected>   </option>
 				<option value = "Asian">Asian</option>
-				<option value = "Black">Black/African American</option>
-				<option value = "White">White/Caucasian</option>
-				<option value = "Native">American Indian/Alaska Native</option>
-				<option value = "Islander">Nativa Hawaiian/Pacific Islander</option>
-				<option value = "Hispanic">Hispanic/Latino</option>
+				<option value = "Black/African American">Black/African American</option>
+				<option value = "White/Caucasian">White/Caucasian</option>
+				<option value = "American Indian/Alaska Native">American Indian/Alaska Native</option>
+				<option value = "Nativa Hawaiian/Pacific Islander">Nativa Hawaiian/Pacific Islander</option>
+				<option value = "Hispanic/Latino">Hispanic/Latino</option>
 				<option value = "Unknown">Unknown</option>
 			</select>
 	</br>
-	<label for = 'age'> Change Age: </label>
-	<input type ='text' name='age' ></input>
+	<label for = 'age'> Change Age:  </label>
+	<input type ='text' name='age' placeholder = " <?php echo $current_age; ?>"></input>
 	</br> 	
 	<label for = 'grade'> Change Grade: </label>
-	<input type ='text' name='grade' ></input>
+	<input type ='text' name='grade' placeholder = " <?php echo $current_grade; ?>" ></input>
 	</br> 
 	<input type='submit' name='submit' value='Submit' > </input>
 	

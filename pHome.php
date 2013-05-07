@@ -27,6 +27,8 @@ in the body are the same. Each link has a description of the pages functionaliti
 		</br>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 				-Sort by name
+		</br>
+		</br>
 		
 	<!--Sessions desctiption -->
 	<a href = "pSessions.php ">My Sessions</a>
