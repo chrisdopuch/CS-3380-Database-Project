@@ -2,9 +2,7 @@
 password, and email address. It checks if there was a new username entered and if so it is udapted and stored in the database.
 The password and email both have confirmations to be sure the user entered the correct information. The code checks that the new 
 password and email match the confirmed password and email, respectively. If the new field for the password or email match the 
-confirming fields then it is updated in the database. Since the user is an experimenter they areredirected back to the experimeters home page.
-Add username and email to the page for user to see already
-Seperate ssessions for each thing to change -->
+confirming fields then it is updated in the database.-->
 
 <html>
 <head>
@@ -16,7 +14,6 @@ Seperate ssessions for each thing to change -->
 </style>
 </head>
 <body>
-<script src="js/bootstrap.min.js"></script>
 	<div id = 'parent'>
 		<?php
 			include 'header.php';
@@ -25,8 +22,8 @@ Seperate ssessions for each thing to change -->
 	<div id = 'form' class = 'clearfix'>
 	<form method= 'POST' action='eUserInfo.php'>
 	<br></br>
-	
-	<?php
+
+<?php
 
 //Connect to Database
 	include 'connect.php';
@@ -43,7 +40,8 @@ Seperate ssessions for each thing to change -->
 	
 	//Get current username
 	$current_username = trim($_SESSION['username']);
-		
+	
+	//Get current contact information from database
 	$query = pg_prepare($conn, "display_info", "SELECT first_name, middle_name, last_name FROM database.experimenters WHERE username = $1");
 	$result = pg_execute($conn, "display_info", array($current_username));
 	$row = pg_fetch_assoc($result);
@@ -56,15 +54,9 @@ Seperate ssessions for each thing to change -->
 	$row = pg_fetch_assoc($result);
 	$current_email = $row['email'];
 		
-	echo "First name: $f_name\n<br>\n";
-	echo "Middle name: $m_name\n<br>\n";
-	echo "Last name: $l_name\n<br>\n";
-	echo "Email: $current_email\n<br>\n";
-
 		
 if (isset($_POST['submit']))
 {
-	
 	
 	if(!empty($first_name))
 	{
@@ -211,13 +203,13 @@ if (isset($_POST['submit']))
 Please enter contact information to change:
 	</br>
 	<label for = 'first_name'> First Name: </label>
-	<input type ='text' name='first_name' ></input>
+	<input type ='text' name='first_name'  placeholder = " <?php echo $f_name; ?>"></input>
 	</br>
 	<label for = 'middle_name'> Middle Name: </label>
-	<input type ='text' name='middle_name' ></input>
+	<input type ='text' name='middle_name' placeholder = " <?php echo $m_name; ?>"></input>
 	</br>
 	<label for = 'last_name'> Last Name: </label>
-	<input type ='text' name='last_name' ></input>
+	<input type ='text' name='last_name' placeholder = " <?php echo $l_name; ?>"></input>
 	</br>
 	<label for = 'newpassword'> Change Password: </label>
 	<input type ='text' name='newpassword' ></input>
@@ -226,10 +218,10 @@ Please enter contact information to change:
 	<input type ='text' name='password_confirm' ></input>
 	</br>
 	<label for = 'newemail'> Change Email: </label>
-	<input type ='text' name='newemail' ></input>
+	<input type ='text' name='newemail' placeholder = " <?php echo $current_email; ?>"></input>
 	</br> 
 	<label for = 'newemail_confirm'> Confirm Email</label>
-	<input type ='text' name='newemail_confirm' ></input>
+	<input type ='text' name='newemail_confirm'  placeholder = " <?php echo $current_email; ?>" ></input>
 	</br> 
 	</br>
 	<input type='submit' name='submit' value='Submit' > </input>
