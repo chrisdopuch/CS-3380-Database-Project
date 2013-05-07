@@ -218,6 +218,13 @@ if (isset($_POST['submit'])){
 			echo "Click <a href='registration.php'>here</a> to go back to registration.\n";
 			return;
 		}
+		
+		//authentication
+		$result = pg_prepare($conn, "auth", "SELECT pid from database.participants WHERE username = $1");
+		$result = pg_execute($conn, "auth", array($user));
+		$row = pg_fetch_assoc($result);
+		$pid = $row['pid'];
+		authentication_email($pid)
 	}
 	
 	session_write_close();
