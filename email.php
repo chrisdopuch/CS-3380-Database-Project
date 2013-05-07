@@ -13,7 +13,7 @@
 	*/
 	function enroll_email($sid){
 		//connect to the DB if we aren't already
-		require_once 'connect.php';
+		require 'connect.php';
 		
 		//check to make sure the pid column in sessions isn't null
 		$query_name = "check_enroll";
@@ -88,7 +88,7 @@
 	*/
 	function authentication_email($pid){
 		//connect to the DB if we aren't already
-		require_once 'connect.php';
+		require 'connect.php';
 		
 		//check to make sure the participant hasn't already authorized
 		$query_name = "check_unauthenticated";
@@ -96,7 +96,7 @@
 		$result = pg_prepare($conn, $query_name, $query);
 		$result = pg_execute($conn, $query_name, array($pid));
 		$row = pg_fetch_assoc($result);
-		if($row['authenticated'] == TRUE){
+		if($row['authenticated'] == 't'){
 			$message = "Error: this participant is already authenticated!";
 			echo "<script> alert('$message'); </script>\n";
 			return false;
@@ -115,7 +115,7 @@
 		$query_name = "insert_authenticate";
 		$query = "INSERT INTO database.emails (send_by, recipient, subject, text) VALUES (CURRENT_TIMESTAMP, $1, $2, $3)";
 		$result = pg_prepare($conn, $query_name, $query);
-		$result = pg_execute($conn, $query_name, array($email, $c_subject, $c_body));
+		$result = pg_execute($conn, $query_name, array($email, $a_subject, $a_body));
 		if(!$result){
 			$message = "Error: could not add authentication email to emails table!";
 			echo "<script> alert('$message'); </script>\n";

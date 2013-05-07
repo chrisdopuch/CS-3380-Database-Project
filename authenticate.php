@@ -1,10 +1,14 @@
-<?php
-	/*
+<!--
 	This page exists to authenticate a participant
 	Authentication emails link to this page with the id of the participant as a get variable
 	You can manually authenticate by going to this page and typing in as a get variable the pid of the participant
-	*/
-
+	-->
+<script>
+	function redirect(){
+		window.location = "http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php"
+	}
+</script>
+<?php
 	//if the id was sent in a get variable
 	if(isset($_GET['id'])){
 		//grab the variable
@@ -20,7 +24,7 @@
 		$result = pg_execute($conn, $query_name, array($pid));
 		$row = pg_fetch_assoc($result);
 		if($row['authenticated'] == TRUE){
-			header(http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php);
+			header("Location: http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php");
 			exit;
 		}
 		
@@ -34,7 +38,12 @@
 			echo "<script> alert('$message'); </script>\n";
 			exit;
 		}
+		
+		$message = "You have been successfully confirmed!";
+		echo "<script> alert('$message'); redirect(); </script>\n";
+		
+	}
 	else{
-		header(http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php);
-	{
+		header("Location: http://babbage.cs.missouri.edu/~cs3380sp13grp11/index.php");
+	}
 ?>

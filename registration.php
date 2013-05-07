@@ -50,7 +50,7 @@ $(document).ready(function() {
 			$('#additionalInfo').append('<br />');
 			$('#additionalInfo').append('Age<input type="text" name="age" id="age"><br />');
 			$('#additionalInfo').append('Highest Grade Completed (numeric)<input type="text" name="grade" id="grade"><br />');
-			$('#additionalInfo').append('May we contact you for further expriments?');
+			$('#additionalInfo').append('May we contact you for further experiments?');
 			$('#additionalInfo').append('<select name="contact" id="contact">');
 			$('#contact').append('<option value="true">Yes</option>',
 				'<option value="false">No</option>'
@@ -71,6 +71,8 @@ function redirect(){
 //set error reporting
 ERROR_REPORTING(E_ALL);
 ini_set("display_errors", 1);
+
+include 'email.php';
 
 session_start();
 
@@ -224,7 +226,7 @@ if (isset($_POST['submit'])){
 		$result = pg_execute($conn, "auth", array($user));
 		$row = pg_fetch_assoc($result);
 		$pid = $row['pid'];
-		authentication_email($pid)
+		authentication_email($pid);
 	}
 	
 	session_write_close();
