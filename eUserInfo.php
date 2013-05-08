@@ -212,10 +212,10 @@ Please enter contact information to change:
 	<input type ='text' name='last_name' placeholder = " <?php echo $l_name; ?>"></input>
 	</br>
 	<label for = 'newpassword'> Change Password: </label>
-	<input type ='text' name='newpassword' ></input>
+	<input type ='password' name='newpassword' ></input>
 	</br>
 	<label for = 'password_confirm'> Confirm Password: </label>
-	<input type ='text' name='password_confirm' ></input>
+	<input type ='password' name='password_confirm' ></input>
 	</br>
 	<label for = 'newemail'> Change Email: </label>
 	<input type ='text' name='newemail' placeholder = " <?php echo $current_email; ?>"></input>

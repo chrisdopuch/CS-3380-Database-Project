@@ -50,33 +50,45 @@ function top($user_type){
 			exit;
 		}
 	}
-
+	
+	echo "<div id='banner-wrapper'></div>";
+	echo "<div id='header-wrapper'><div id='header' class='container'><div id='logo'></div>";
+	echo "<div id='menu' ><ul>";
+	//echo "<div id = \"banner\">\n<img src = \"images/banner.jpg\" alt=\"Mizzou Physcology\"/>\n</div>\n";
+	
 	//print banner image
-	echo "<div id = \"banner\">\n<img src = \"images/banner.jpg\" alt=\"Mizzou Physcology\"/>\n</div>\n";
 	
 	//build header
-	echo "<header>\n<div id=\"headerLinksDiv\">\n";
+	echo "<header><div id='headerLinksDiv'>\n\n";
 	
 	//Dynamically generate content for header based on user type
 	if($user_type == "experimenter"){
-			echo "<a class=\"headerLinks\" href=\"eHome.php\">Home</a>\n";
-			echo "<a class=\"headerLinks\" href=\"eExperiments.php\">Experiments</a>\n";
-			echo "<a class=\"headerLinks\" href=\"eSessions.php\">Sessions</a>\n";
-			echo "<a class=\"headerLinks\" href=\"eLocations.php\">Locations</a>\n";
-			echo "<a class=\"headerLinks\" href=\"eReports.php\">Reports</a>\n";
-			echo "<a class=\"headerLinks\" href=\"eUserInfo.php\">My Account</a>\n";
+			echo "<li><a class=\"headerLinks\" href=\"eHome.php\">Home</a></li>\n";
+			echo "<li><a class=\"headerLinks\" href=\"eExperiments.php\">Experiments</a></li>\n";
+			echo "<li><a class=\"headerLinks\" href=\"eSessions.php\">Sessions</a></li>\n";
+			echo "<li><a class=\"headerLinks\" href=\"eLocations.php\">Locations</a></li>\n";
+			echo "<li><a class=\"headerLinks\" href=\"eReports.php\">Reports</a></li>\n";
+			echo "<li><a class=\"headerLinks\" href=\"eUserInfo.php\">My Account</a></li>\n";
 			if ($debug){
-				echo "<a class=\"headerLinks\" href=\"dataedit.php\">DEBUG: Edit Data</a>\n";
+				echo "<li><a class=\"headerLinks\" href=\"dataedit.php\">DEBUG: Edit Data</a></li>\n";
 			}
 		}
 		else{
-			echo "<a class=\"headerLinks\" href=\"pHome.php\">Home</a>\n";
-			echo "<a class=\"headerLinks\" href=\"pEnroll.php\">Sign Up</a>\n";
-			echo "<a class=\"headerLinks\" href=\"pSessions.php\">My Sessions</a>\n";
-			echo "<a class=\"headerLinks\" href=\"pUserInfo.php\">My Account</a>\n";
+			echo "<li><a class=\"headerLinks\" href=\"pHome.php\">Home</a></li>\n";
+			echo "<li><a class=\"headerLinks\" href=\"pEnroll.php\">Sign Up</a></li>\n";
+			echo "<li><a class=\"headerLinks\" href=\"pSessions.php\">My Sessions</a></li>\n";
+			echo "<li><a class=\"headerLinks\" href=\"pUserInfo.php\">My Account</a></li>\n";
 		}
 	
 	//finish header
-	echo "<a id=\"headerLogout\" href=\"logout.php\">Logout</a>\n</div>\n</header>\n";
+	echo "<li><a id=\"headerLogout\" href=\"logout.php\">Logout</a></li>\n</div>\n</header>\n";
+	echo "</ul>";
+	echo "</div>";
+	echo "</div>";
+	echo "</div>";
+	echo "</div>";
+	echo "<div id='page' class='container'>
+        <div id='content2'>
+                <div class='post'><h2 class='title'><p class='meta'></p><div class='entry'>";
 }
 ?>
