@@ -90,17 +90,14 @@ $(document).ready(function() {
 </head>
 <body>
 
-<!-- Calandar form -->
-<form id="form1" value =  name="form1" method="post" action="">
-<label for="datepickerID"></label>
-<input type="text" name="datepickerID" id="datepickerID" />
-</form>
+
 
 
 <!--include the header-->
 <?php include 'header.php';
 //the argument for top() must be either "participant" or "experimenter"
 top("participant"); ?>
+
 
 
 <div id="container">
@@ -125,7 +122,11 @@ if(isset($_POST['submit'])){
 	}
 }
 
+
+
 ?>
+
+
 
 <div id='main' class='clearfix'>
 	<h1>Enroll</h1><br />
@@ -137,6 +138,9 @@ if(isset($_POST['submit'])){
 			<option value="time" <?php if($selected == '2') echo "selected"; ?>>By Start Time</option>
 			<option value="experiment"<?php if($selected == '3') echo "selected"; ?>>By Experiment Name</option>
 		</select><br />
+		<!-- Calandar form -->
+		<label for="datepickerID"></label>
+		<input type="text" name="datepickerID" id="datepickerID" />
 		<div id="extraOptions">
 		</div>
 		<input type='submit' value='Submit' name='submit' ><br />
