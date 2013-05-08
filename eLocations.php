@@ -7,8 +7,9 @@ session_start();?>
 <title>Locations</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--include the style sheet for the website-->
-<link rel="stylesheet" type="text/css" href="style.css" />
-<style type = "text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700|Archivo+Narrow:400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="style.css" media='all' />
+<meta name='keywords' content='' /><meta name='description' content='' /><style type = "text/css">
 #top
         {
         text-align: center;
@@ -33,6 +34,7 @@ session_start();?>
 top('experimenter');
 ?>
 
+<h1>Locations:</h1>
 <div id="container">
         <div id="content">
         <p>&nbsp;</p>
@@ -56,7 +58,8 @@ switch ($action)
 			echo"<tr><td colspan='1'><input type='submit' value='Submit'></td></tr>";
 			echo"</table>";
 			echo"</form>";
-		
+			echo"</br>";
+			echo"<a href='eLocations.php'>Cancel</a> <br />";
 	      	
        
              	break;
@@ -68,7 +71,7 @@ switch ($action)
                         $query = "INSERT INTO database.locations (room, building) Values ($1, $2)";
                         $result = pg_prepare($conn, "add", $query);
                         $result1 = pg_execute($conn, "add", array($room, $building));
-
+		
 
                         if ($result1)
                                 {
@@ -275,6 +278,6 @@ function pgResultToTableWithButtons($result, $entryType)
 ?>
 </div>
 <!--include the footer-->
-<!--?php include 'footer.php'; ?-->
+<?php include 'footer.php'; ?>
 </body>
 </html>

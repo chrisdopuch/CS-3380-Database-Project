@@ -42,7 +42,10 @@ $(document).ready(function() {
 		else if($('#DisplayBySelect').val() == 'date'){
 			$('#extraOptions').append( //add to extra options the following html code
 			$("#datepickerID").datepicker()	                       
+	
 			);
+
+			
 		}       
 		else if($('#DisplayBySelect').val() == 'time'){
 			$('#extraOptions').append( //add to extra options the following html code
@@ -79,14 +82,15 @@ $(document).ready(function() {
 	});
 	//apply datatables format 
 	$('#reportsTable').dataTable();
-});
 
+
+});
+	
 </script>
 </head>
 <body>
 
-<!-- Calandar form --!>
-
+<!-- Calandar form -->
 <form id="form1" value =  name="form1" method="post" action="">
 <label for="datepickerID"></label>
 <input type="text" name="datepickerID" id="datepickerID" />
@@ -96,7 +100,12 @@ $(document).ready(function() {
 <!--include the header-->
 <?php include 'header.php';
 //the argument for top() must be either "participant" or "experimenter"
-top("participant"); 
+top("participant"); ?>
+
+
+<div id="container">
+        <div id="content">
+<?php
 //check which option was selected, and set selected variable
 if(isset($_POST['submit'])){
 	switch($_POST['EnrollType']){
@@ -115,14 +124,15 @@ if(isset($_POST['submit'])){
 		
 	}
 }
+
 ?>
+
 <div id='main' class='clearfix'>
-	<h2>Enroll</h2><br />
+	<h1>Enroll</h1><br />
 	<form action='pEnroll.php' method='POST' name='submit' id='reportForm'>
 		<h3 id="formHeader">Search Experiments:</h3>
 		<select name='EnrollType' id="DisplayBySelect">
-			<option selected="selected">Select Option</Option>
-			<option value="all" <?php if($selected == '0') echo "selected"; ?>>All Experiments</option>
+			<option selected = value="all" <?php if($selected == '0') echo "selected"; ?>>All Experiments</option>
 			<option value="date" <?php if($selected == '1') echo "selected"; ?>>By Date of Experiment</option>
 			<option value="time" <?php if($selected == '2') echo "selected"; ?>>By Start Time</option>
 			<option value="experiment"<?php if($selected == '3') echo "selected"; ?>>By Experiment Name</option>
@@ -134,62 +144,67 @@ if(isset($_POST['submit'])){
 </div>
 <!--process form submisison -->
 <?php
-if(isset($_POST['submit'])){
-	switch($_POST['EnrollType']){
-		case 'all':
-			$query = "SELECT experiments.expid, experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON (experiments.expid = sessions.expid) ORDER BY sessions.session_date asc";
-				$result = pg_prepare($conn, "all_experiments", $query);
-				$result = pg_execute($conn, "all_experiments", array());
-			break;
+switch($_POST['EnrollType']){
+	case 'all':
+		$query = "SELECT experiments.expid, experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON (experiments.expid = sessions.expid) WHERE (sessions.pid = NULL) WHERE sessions.pid IS NULL ORDER BY sessions.session_date asc";
+			$result = pg_prepare($conn, "all_experiments", $query);
+			$result = pg_execute($conn, "all_experiments", array());
+		break;
 
-		case 'date':
-			 
-		        	$mydate=$_POST['datepickerID'];
-				// change format to match database format of "date" (mm-dd-yyyy)       
-				$show_date = DateTime::createFromFormat('m/d/Y', $mydate)->format('Y-m-d');	
-				$query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.session_date = '$show_date') ORDER BY sessions.session_date asc";
-				$result = pg_prepare($conn, "chosen_Date", $query);
-				$result = pg_execute($conn, "chosen_Date", array());
-						
-			break;
+	case 'date':
+		 
+	        	$mydate=$_POST['datepickerID'];
+			// change format to match database format of "date" (mm-dd-yyyy)       
+			$show_date = DateTime::createFromFormat('m/d/Y', $mydate)->format('Y-m-d');	
+			$query = "SELECT sessions.sid, experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time,  FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.session_date = '$show_date' AND sessions.pid IS NULL) ORDER BY sessions.session_date asc";
+			$result = pg_prepare($conn, "chosen_Date", $query);
+			$result = pg_execute($conn, "chosen_Date", array());
+					
+		break;
 
-		case 'time':
-			$option = $_POST['options'];
-			if($option == "mor"){
-				$query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '12:00:00') ORDER BY sessions.session_date asc";
-				$result = pg_prepare($conn, "morning_sessions", $query);
-				$result = pg_execute($conn, "morning_sessions", array());
-			} else if($option == "aft"){
-				$query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '17:00:00') ORDER BY sessions.session_date asc";
-				$result = pg_prepare($conn, "afternoon_sessions", $query);
-				$result = pg_execute($conn, "afternoon_sessions", array());
-			} else if($option == "eve"){
-                                $query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '24:00:00') ORDER BY sessions.session_date asc";
-                                $result = pg_prepare($conn, "afternoon_sessions", $query);
-                                $result = pg_execute($conn, "afternoon_sessions", array());
-                        }
-			break;
+	case 'time':
+		$option = $_POST['options'];
+		if($option == "mor"){
+			$query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '12:00:00' AND sessions.pid IS NULL) ORDER BY sessions.session_date asc";
+			$result = pg_prepare($conn, "morning_sessions", $query);
+			$result = pg_execute($conn, "morning_sessions", array());
+		} else if($option == "aft"){
+			$query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '17:00:00' AND sessions.pid IS NULL) ORDER BY sessions.session_date asc";
+			$result = pg_prepare($conn, "afternoon_sessions", $query);
+			$result = pg_execute($conn, "afternoon_sessions", array());
+		} else if($option == "eve"){
+                            $query = "SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.start_time < '24:00:00' AND sessions.pid IS NULL) ORDER BY sessions.session_date asc";
+                            $result = pg_prepare($conn, "afternoon_sessions", $query);
+                            $result = pg_execute($conn, "afternoon_sessions", array());
+                    }
+		break;
 
-		case 'experiment':
+	case 'experiment':
 
-				$experiment = trim($_POST['experiment']);
-				echo $experiment;
-				$query ="SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(experiments.name = $1) ORDER BY sessions.session_date asc";
-				$result = pg_prepare($conn, "by_experiments", $query);
-				$result = pg_execute($conn, "by_experiments", array($experiment));
-			
-			break;
-	
-	}
-	if($result){
-		//create the table
-		make_table($result);
-	}
-	else{
-		echo "No results were returned by your query.";
-	}
+			$experiment = trim($_POST['experiment']);
+			echo $experiment;
+			$query ="SELECT  experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(experiments.name = $1 AND sessions.pid IS NULL) ORDER BY sessions.session_date asc";
+			$result = pg_prepare($conn, "by_experiments", $query);
+			$result = pg_execute($conn, "by_experiments", array($experiment));
+		
+		break;
+
+	default:
+		$query = "SELECT experiments.expid, experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON (experiments.expid = sessions.expid) WHERE sessions.pid IS NULL  ORDER BY sessions.session_date asc";
+			$result = pg_prepare($conn, "all_experiments", $query);
+			$result = pg_execute($conn, "all_experiments", array());
+		break;
 
 }
+if($result){
+	//create the table
+	make_table($result);
+}
+else{
+	echo "No results were returned by your query.";
+}
+
+
 ?>
 <?php
 	function make_table($result){
@@ -250,16 +265,18 @@ FUNCTION enroll_button($row)
 		$expid = $row['expid'];
 		$session_date = $row['session_date'];
 		$start_time = $row['start_time'];
-                $end_time = $row['end_time'];
-                $payment = $row['payment'];
-
+	        $end_time = $row['end_time'];
+	        $payment = $row['payment'];
+	        $sid = $row['sid'];
+	
 		//enroll button
-                echo "<td><form action='enrollment_confirm.php' method='POST'>
+                echo "<td><form action='pEnroll_confirm.php' method='POST'>
                 <input type='hidden' name='expid' value= $expid />
                 <input type='hidden' name='session_date' value= $session_date />
                 <input type='hidden' name='start_time' value=$start_time />
 		<input type='hidden' name='end_time' value=$end_time />
 		<input type='hidden' name='payment' value=$payment />
+		<input type='hidden' name='sid' value=$sid />
                 <input type='submit' name='submit' value='Enroll' />
                 </form></td>";
 
@@ -275,6 +292,7 @@ FUNCTION enroll_button($row)
  *
  */
 function validate_user_against_requirements($expid, $username){
+	
 	//build queries
 	$query1 = "SELECT requirements FROM database.experiments WHERE expid = $1";
 	$query2 = "SELECT ethnicity, gender, age, education FROM database.users WHERE username = $1";
@@ -394,8 +412,9 @@ function validate_user_against_requirements($expid, $username){
 }
 
 ?>
+</div></div>
 <!--include the footer-->
-<?php if(!isset($_POST['submit']))include 'footer.php'; ?>
+<?php// include 'footer.php' ?>
 </body>
 </html>
 
