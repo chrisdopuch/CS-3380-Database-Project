@@ -67,9 +67,15 @@ switch ($action){
 		//indexing variable for table printing (why are we indexing the table?)
 		$i = 0;
 
-		//if query failed or user not signed up
+		//if query failed
 		if(!$result){
-			echo "You aren't currently signed up for any sessions.<br/>\n";
+			echo "Query failed .".pg_last_error()."<br/>\n";
+			exit(1);
+		}
+		//if you have no sessions
+		if(pg_num_rows($result) == 0){
+			echo "You are not currently enrolled in any experiment sessions.<br/>\n";
+			echo "Go to <a href='pEnroll.php'>the enrollment page</a>.<br/>\n";
 			exit(1);
 		}
 
