@@ -1,8 +1,12 @@
 <html>
 <head>
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style.css" />
 <title>MU Psychological Sciences</title>
+<meta name="keywords" content="" />
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700|Archivo+Narrow:400,700" rel="stylesheet" type="text/css">
+<link href="style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
 </head>
 <script>
 	function redirect(){
@@ -13,7 +17,6 @@
 //set error reporting
 ERROR_REPORTING(E_ALL);
 ini_set("display_errors", 1);
-
 session_start();
 
 //check if already logged in, and redirect
@@ -93,43 +96,81 @@ if (isset($_POST['submit'])){
 	}
 }
 ?>
-
 <body>
-<div id="container">
-		<div id="mainpic">
-        	<h1>&nbsp;</h1>
-            <h2>&nbsp;</h2>
-		</div>   
- 
- 
-		<div id="content">
- 			<p>&nbsp;</p>
-            <p>
-			LOGIN:
+<div id="banner-wrapper"></div>
+	<div id="header-wrapper">
+		<div id="header" class="container">
+		<div id="menu"></div>
+		</div>
+	</div>
+	<div id="page" class="container">
+ 		<div id="content">
+	 		<div class="post">
+			<h2 class="title"><a>Welcome to the Department of Psychological Science at Mizzou!</a> </h2>
+            		<p>&nbsp;</p>
+            		<h3>
+			
+			<a>LOGIN:</a>
+			</h3>
+
 			<br/>
 			<form action= "index.php" method='POST' name='submit'>
 			Username:  <input type="text"name="username"><br>
 			Password:  <input type="password"name="password"><br>
 			<input type='submit' value= 'Submit' name='submit'>
 			</form>
-	
+			</br>
+			New Here? Click below to Register!				
 			<form action="registration.php" method='POST' name='register'>
 			<input type='submit' value="Register" name='register'>
 			</form>
 			</p>
 			<p>&nbsp;</p>
+        
+	<p class="meta">&nbsp;</p>
+	<div style="clear: both;"></div>
+	</div>
+  </div>	
+  <!-- end #content -->
 
-  
-    		<h2><u>About </u></h2>
-    		<p>&nbsp;</p>
-    		<h3> Register for different clinical trials offered by the University of Missouri's Psychology Research Department. Browse various experiments and their sessions. 
-			</h3>
-			<h3>&nbsp;</h3>
-			<p>&nbsp;</p>
-    	    <h3>&nbsp;</h3>
+  <!-- Create a side column to display contact info-->
+  <div id="sidebar">
+	<ul>
+	<li>
+	<h2>Contact Information:</h2>
+		<ul>
+		<li>
+		<div>
+		  <div>
+		    <div>
+		       <div>
+		       	   <li>
+		             <div>
+		              <h3> 
+		              <p> Department of: </br>Psychological Sciences </br>210 McAlester Hall </br>Columbia, MO 65211-2500 </br>Phone: 573-882-6860 </br>Fax: 573-882-7710</p>
+				</h3>
+		              </div>
+		            </li>
+		         </div>
+		    </div>
+		  </div>
 		</div>
+		</li>
+		</ul>
+	</li>
+	<li>
+	<h2>&nbsp;</h2>
+</li>
+<li> </li>
+</ul>
 </div>
-<?php include 'footer.php';?>
+<!-- end #sidebar -->
 
+
+</div>
+
+<div id="footer" class="container">
+<?php include 'footer.php';?>
+</div>
 </body>
 </html>
