@@ -9,6 +9,7 @@ This page is where users are directed when they click the register button on ind
 <script src="jslibs/jquery-1.9.1.min.js"></script>
 <!--include masked input library-->
 <script src="jslibs/jquery.maskedinput.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
 <script>
 //do this when the document loads
 $(document).ready(function() {
@@ -241,6 +242,15 @@ if (isset($_POST['submit'])){
 ?>
 </head>
 <body>
+<div id='banner-wrapper'></div>
+<div id="header-wrapper">
+		<div id="header" class="container">
+		<div id="menu"></div>
+		</div>
+	</div>
+<div id='page' class='container'>
+<div id='content2'>
+<div class='post'><h2 class='title'><p class='meta'></p><div class='entry'>
 <h2>Registration</h2>
 <p>Please fill out the registration form, all fields are required.</p>
 <form method='POST' action='registration.php'>
