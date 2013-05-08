@@ -146,7 +146,7 @@ if(isset($_POST['submit'])){
 <?php
 switch($_POST['EnrollType']){
 	case 'all':
-		$query = "SELECT experiments.expid, experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON (experiments.expid = sessions.expid) WHERE (sessions.pid = NULL) WHERE sessions.pid IS NULL ORDER BY sessions.session_date asc";
+		$query = "SELECT experiments.expid AS Experiment_ID, experiments.payment AS Payment,experiments.name AS Name, sessions.session_date AS Date, sessions.start_time AS Begins, sessions.end_time Ends, sessions.sid AS Session_ID FROM database.experiments INNER JOIN database.sessions ON (experiments.expid = sessions.expid) WHERE (sessions.pid = NULL) WHERE sessions.pid IS NULL ORDER BY sessions.session_date asc";
 			$result = pg_prepare($conn, "all_experiments", $query);
 			$result = pg_execute($conn, "all_experiments", array());
 		break;
@@ -156,7 +156,7 @@ switch($_POST['EnrollType']){
 	        	$mydate=$_POST['datepickerID'];
 			// change format to match database format of "date" (mm-dd-yyyy)       
 			$show_date = DateTime::createFromFormat('m/d/Y', $mydate)->format('Y-m-d');	
-			$query = "SELECT sessions.sid, experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time,  FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.session_date = '$show_date' AND sessions.pid IS NULL) ORDER BY sessions.session_date asc";
+			$query = "SELECT sessions.sid, experiments.expid,experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time FROM database.experiments INNER JOIN database.sessions ON(experiments.expid = sessions.expid) WHERE(sessions.session_date = '$show_date' AND sessions.pid IS NULL) ORDER BY sessions.session_date asc";
 			$result = pg_prepare($conn, "chosen_Date", $query);
 			$result = pg_execute($conn, "chosen_Date", array());
 					
@@ -190,7 +190,7 @@ switch($_POST['EnrollType']){
 		break;
 
 	default:
-		$query = "SELECT experiments.expid, experiments.payment,experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON (experiments.expid = sessions.expid) WHERE sessions.pid IS NULL  ORDER BY sessions.session_date asc";
+		$query = "SELECT experiments.expid, experiments.payment, experiments.name, sessions.session_date, sessions.start_time, sessions.end_time, sessions.sid FROM database.experiments INNER JOIN database.sessions ON (experiments.expid = sessions.expid) WHERE (sessions.pid IS NULL)  ORDER BY sessions.session_date asc";
 			$result = pg_prepare($conn, "all_experiments", $query);
 			$result = pg_execute($conn, "all_experiments", array());
 		break;

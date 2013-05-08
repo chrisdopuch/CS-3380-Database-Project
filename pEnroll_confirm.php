@@ -5,6 +5,8 @@
 <title>Enrolled</title>
 <!--connect to the database-->
 <?php
+ERROR_REPORTING(E_ALL);
+ini_set("display_errors",1);
  session_start();
  include 'connect.php';?>
 <!--include the style sheet for the website-->
@@ -49,7 +51,7 @@ top("participant") ?>
 	
 
 ///////////////////////////////////////////// CHECK REQUIREMENTS /////////////////////////////////////
-$check = validate_user_against_requirements($expid, $username);
+$check = validate_user_against_requirements($expid, $user_name);
 	 if (!$check)
                 {
                 echo "Sorry, You do not meet the requirements for this experiment";
@@ -144,10 +146,10 @@ function make_table($result)
 
 function validate_user_against_requirements($expid, $username)
 {
-	
+include 'connect.php';		
         //build queries
         $query1 = "SELECT requirements FROM database.experiments WHERE expid = $1";
-        $query2 = "SELECT ethnicity, gender, age, education FROM database.users WHERE username = $1";
+        $query2 = "SELECT ethnicity, gender, age, education FROM database.participants WHERE username = $1";
         //prepare the query
         $stmt1 = pg_prepare($conn, "exp_query", $query1);
         $stmt2 = pg_prepare($conn, "user_query", $query2);
@@ -167,7 +169,7 @@ function validate_user_against_requirements($expid, $username)
         }
 
         //returns an assoc array formed from the JSON field returned by the query
-        $requirements = json_decode(pg_fetch_result($result1, 0, "requirements"));
+        $requirements = json_decode(pg_fetch_assoc($result1, 0, "requirements"), TRUE);
         //check that the decode went alright
         if ($requirements == NULL){
                 echo "something goofy goin' on with your requirements on that study: ".json_last_error()."\n";
@@ -179,7 +181,8 @@ function validate_user_against_requirements($expid, $username)
 		        //start checking requirements
         //ethnicity
         //If ethnicity is not set to "don't care" in the requirements field
-        if ($requirements["ethnicity"]["sel"] != "x"){
+        if ($requirements["ethnicity"]["sel"] != "x")
+		{
                 //switch on the operator; available options: "is" and "is not"
                 switch ($requirements["ethnicity"]["op"]){
                         case "is":
