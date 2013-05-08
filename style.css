@@ -137,7 +137,7 @@ hr {
 
 #menu li {
 	float: left;
-	padding: 0px 2em;
+	padding: 0px 1em;
 }
 
 #menu a {
@@ -145,8 +145,9 @@ hr {
 	line-height: 60px;
 	text-decoration: none;
 	text-transform: uppercase;
-	font-size: 200%;
+	font-size: 150%;
 	color: #FFF;
+	font-weight: bold;
 }
 
 #menu a:hover {
