@@ -135,9 +135,9 @@ top("experimenter");
 			echo "\t\t\t\t\t<td>\n";
 			echo "\t\t\t\t\t\t<select name='age_op'>\n";
 			echo "\t\t\t\t\t\t\t<option value='x' selected='selected'> don't care </option>\n";
-			echo "\t\t\t\t\t\t\t<option value='=='> equal to </option> \n";
-			echo "\t\t\t\t\t\t\t<option value='>='> greater than or equal to </option> \n";
-			echo "\t\t\t\t\t\t\t<option value='<='> less than or equal to </option>\n";
+			echo "\t\t\t\t\t\t\t<option value='eq'> equal to </option> \n";
+			echo "\t\t\t\t\t\t\t<option value='greq'> greater than or equal to </option> \n";
+			echo "\t\t\t\t\t\t\t<option value='leq'> less than or equal to </option>\n";
 			echo "\t\t\t\t\t\t</select>\n";
 			echo "\t\t\t\t\t</td>\n";
 			echo "\t\t\t\t\t<td>\n";
@@ -150,9 +150,9 @@ top("experimenter");
 			echo "\t\t\t\t\t<td>\n";
 			echo "\t\t\t\t\t\t<select name='education_op'>\n";
 			echo "\t\t\t\t\t\t\t<option value='x' selected='selected'> don't care </option>\n";
-			echo "\t\t\t\t\t\t\t<option value='=='> equal to </option> \n";
-			echo "\t\t\t\t\t\t\t<option value='>='> greater than or equal to </option> \n";
-			echo "\t\t\t\t\t\t\t<option value='<='> less than or equal to </option>\n";
+			echo "\t\t\t\t\t\t\t<option value='eq'> equal to </option> \n";
+			echo "\t\t\t\t\t\t\t<option value='greq'> greater than or equal to </option> \n";
+			echo "\t\t\t\t\t\t\t<option value='leq'> less than or equal to </option>\n";
 			echo "\t\t\t\t\t\t</select>\n";
 			echo "\t\t\t\t\t</td>\n";
 			echo "\t\t\t\t\t<td>\n";
@@ -177,8 +177,8 @@ top("experimenter");
 									"sel" => $_POST['ethnicity_sel']),
 								"gender" => $_POST['gender_sel'],
 								"age" => array(
-									"op" => $_POST['gender_op'],
-									"sel" => $_POST['gender_sel']),
+									"op" => $_POST['age_op'],
+									"sel" => $_POST['age_sel']),
 								"education" => array(
 									"op" => $_POST['education_op'],
 									"sel" => $_POST['education_sel']));

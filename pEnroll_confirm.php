@@ -169,7 +169,7 @@ include 'connect.php';
         }
 
         //returns an assoc array formed from the JSON field returned by the query
-        $requirements = json_decode(pg_fetch_assoc($result1, 0, "requirements"), TRUE);
+        $requirements = json_decode(pg_fetch_result($result1, 0, "requirements"), TRUE);
         //check that the decode went alright
         if ($requirements == NULL){
                 echo "something goofy goin' on with your requirements on that study: ".json_last_error()."\n";
@@ -215,21 +215,21 @@ include 'connect.php';
         if ($requirements["age"]["op"] != "x"){
                 //switch on the remaining operators
                 switch ($requirements["age"]["op"]){
-                        case "==":
+                        case "leq":
                                 //if the age requirement is not exactly equal to the credential, return false
                                 if ($requirements["age"]["sel"] != $credentials["age"]){
                                         return FALSE;
                                 }
 
                                 break;
-                        case ">=":
+                        case "greq":
                                 //if is is not the case that the credential is greater than or equal to the requirement, return false
                                 if (!($credentials["age"] >= $requirements["age"]["sel"])){
                                         return FALSE;
                                 }
 
                                 break;
-                        case "<=":
+                        case "leq":
                                 //if is is not the case that the credential is less than or equal to the requirement, return false
                                 if (!($credentials["age"] <= $requirements["age"]["sel"])){
                                         return FALSE;
@@ -243,19 +243,19 @@ include 'connect.php';
         if ($requirements["education"]["op"] != "x"){
                 //switch on the remaining operators
                 switch ($requirements["education"]["op"]){
-                        case "==":
+                        case "eq":
                                 //if the education requirement is not exactly equal to the credential, return false
                                 if ($requirements["education"]["sel"] != $credentials["education"]){
                                         return FALSE;
                                 }
                                 break;
-                        case ">=":
+                        case "greq":
                                 //if is is not the case that the credential is greater than or equal to the requirement, return false
                                 if (!($credentials["education"] >= $requirements["education"]["sel"])){
                                         return FALSE;
                                 }
                                 break;
-                        case "<=":
+                        case "leq":
                                 //if is is not the case that the credential is less than or equal to the requirement, return false
                                 if (!($credentials["education"] <= $requirements["education"]["sel"])){
                                         return FALSE;

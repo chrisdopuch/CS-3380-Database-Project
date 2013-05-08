@@ -126,14 +126,21 @@ top("experimenter");
 				$a_lid = $_POST['a_lid'];
 				$a_eid = $_POST['a_eid'];
 				$a_expid = $_POST['a_expid'];
+				
 				$a_pid = $_POST['a_pid'];
+				if ($_POST['a_pid'] == NULL){
+					$query = "INSERT INTO database.sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES ($1, $2, $3, $4, $5, $6, NULL)";
+					$stmt = pg_prepare($conn, "add_s", $query);
+					$result = pg_execute($conn, "add_s", array($a_session_date, $a_start_time, $a_end_time, $a_lid, $a_eid, $a_expid));
 
-				//build the query
-				$query = "INSERT INTO database.sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES ($1, $2, $3, $4, $5, $6, $7)";
-				//prepare the query
-				$stmt = pg_prepare($conn, "add_s", $query);
-				//execute query 
-				$result = pg_execute($conn, "add_s", array($a_session_date, $a_start_time, $a_end_time, $a_lid, $a_eid, $a_expid, $a_pid));
+
+				}
+				else {
+					$query = "INSERT INTO database.sessions (session_date, start_time, end_time, lid, eid, expid, pid) VALUES ($1, $2, $3, $4, $5, $6, $7)";
+					$stmt = pg_prepare($conn, "add_s", $query);
+					$result = pg_execute($conn, "add_s", array($a_session_date, $a_start_time, $a_end_time, $a_lid, $a_eid, $a_expid));
+				}
+
 
 				//Check to see if the query was successful
 				if ($result){
